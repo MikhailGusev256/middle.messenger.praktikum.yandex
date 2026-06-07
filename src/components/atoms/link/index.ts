@@ -1,4 +1,4 @@
-﻿import Handlebars from "handlebars";
+﻿import Handlebars from 'handlebars';
 import link from './link.hbs?raw';
 import './link.scss';
 
