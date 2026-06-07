@@ -1,0 +1,15 @@
+.chat-preview-list {
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  height: 100%;
+  border-right: 0.0625rem solid var(--color-border);
+}
+
+.chat-preview-list__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1rem;
+  border-bottom: 0.0625rem solid var(--color-border);
+}

@@ -1,0 +1,10 @@
+@use 'styles/auth' as auth;
+
+.register-card {
+  @include auth.card;
+}
+
+.register-card__form {
+  @include auth.form;
+}
+

@@ -1,0 +1,14 @@
+.chats-page {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  height: 100vh;
+}
+
+.chats-page__window {
+  display: flex;
+  flex-direction: column;
+}
+
+.chats-page__history {
+  flex: 1;
+}
