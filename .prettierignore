@@ -1,0 +1,7 @@
+# Build output
+dist/
+
+# Handlebars templates — Prettier's glimmer parser doesn't support {{> Partial}}
+*.hbs
+
+.github/

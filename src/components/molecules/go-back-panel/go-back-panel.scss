@@ -1,0 +1,18 @@
+.go-back-panel {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  background-color: var(--color-border);
+  padding: 1rem;
+  width: 5rem;
+}
+
+.go-back-panel svg {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
