@@ -7,13 +7,30 @@
     "dev": "vite",
     "start": "tsc && vite build && vite preview",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint --fix .",
+    "lint:css": "stylelint **/*.scss",
+    "lint:css:fix": "stylelint --fix **/*.scss",
+    "lint": "npm run format && npm run lint:css && npm run lint:js",
+    "lint:fix": "npm run format:fix && npm run lint:css:fix && npm run lint:js:fix"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^2.0.0",
+    "@eslint/markdown": "^8.0.2",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.6.0",
     "prettier": "^3.8.3",
     "prettier-plugin-organize-imports": "^4.3.0",
     "sass-embedded": "^1.100.0",
+    "stylelint": "^17.13.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "~6.0.2",
+    "typescript-eslint": "^8.61.1",
     "vite": "^8.0.12"
   },
   "dependencies": {
