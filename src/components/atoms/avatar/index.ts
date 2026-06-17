@@ -1,4 +1,4 @@
-﻿import Handlebars from 'handlebars';
-import avatar from './avatar.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './avatar.scss';
-Handlebars.registerPartial('Avatar', avatar);
+import Avatar from './avatar.ts';
+registerComponent(Avatar);
