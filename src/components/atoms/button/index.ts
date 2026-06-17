@@ -1,4 +1,4 @@
-﻿import Handlebars from 'handlebars';
-import button from './button.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './button.scss';
-Handlebars.registerPartial('Button', button);
+import Button from './button.ts';
+registerComponent(Button);
