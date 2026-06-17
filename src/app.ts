@@ -1,6 +1,4 @@
-﻿import Handlebars from 'handlebars';
-
-import './components/atoms';
+﻿import './components/atoms';
 import './components/helpers';
 import './components/molecules';
 import './components/organisms';
@@ -17,7 +15,7 @@ export default class App {
 
   constructor() {
     this.state = {
-      currentPage: 'profile',
+      currentPage: 'login',
     };
   }
 
@@ -25,10 +23,10 @@ export default class App {
     const app = document.getElementById('app');
     if (!app) return;
 
-    const templateDelegate = TemplateMap[this.state.currentPage];
-
-    const html = Handlebars.compile(templateDelegate);
-    app.innerHTML = html(ContextMap[this.state.currentPage]);
+    const templateBlock = TemplateMap[this.state.currentPage];
+    const context = ContextMap[this.state.currentPage];
+    app.appendChild(templateBlock.element());
+    templateBlock.setProps(context);
 
     this.addLinkEventListeners();
   }
@@ -36,7 +34,7 @@ export default class App {
   addLinkEventListeners() {
     const links = document.querySelectorAll<HTMLElement>('[data-page]');
     links.forEach((link) => {
-      link.addEventListener('click', (_) => {
+      link.addEventListener('click', () => {
         const page = link.dataset.page;
         if (this.isTemplateName(page)) {
           this.state.currentPage = page;

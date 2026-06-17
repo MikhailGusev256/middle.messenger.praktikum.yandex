@@ -1,5 +1,5 @@
-import Handlebars from 'handlebars';
-import iconButton from './icon-button.hbs?raw';
+import { registerComponent } from '../../core/registerComponent.ts';
 import './icon-button.scss';
+import IconButton from './icon-button.ts';
 
-Handlebars.registerPartial('IconButton', iconButton);
+registerComponent(IconButton);

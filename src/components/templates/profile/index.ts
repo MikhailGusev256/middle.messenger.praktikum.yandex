@@ -1,4 +1,7 @@
-﻿import profileTemplate from './profile.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './profile.scss';
+import Profile from './profile.ts';
 
-export default profileTemplate;
+registerComponent(Profile);
+
+export default Profile;

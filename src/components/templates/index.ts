@@ -1,4 +1,5 @@
-﻿import chatsTmpl from './chats';
+﻿import type Block from '../core/block.ts';
+import chatsTmpl from './chats';
 import { chats } from './chats/data';
 import errorTmpl from './error';
 import loginTmpl from './login';
@@ -13,13 +14,13 @@ export type TemplateName =
   | 'error404'
   | 'error500';
 
-export const TemplateMap: Record<TemplateName, string> = {
-  login: loginTmpl,
-  register: registerTmpl,
-  chats: chatsTmpl,
-  profile: profileTmpl,
-  error404: errorTmpl,
-  error500: errorTmpl,
+export const TemplateMap: Record<TemplateName, Block> = {
+  login: new loginTmpl(),
+  register: new registerTmpl(),
+  chats: new chatsTmpl(),
+  profile: new profileTmpl(),
+  error404: new errorTmpl(),
+  error500: new errorTmpl(),
 };
 
 export const ContextMap: Record<TemplateName, Record<string, unknown>> = {

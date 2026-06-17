@@ -1,5 +1,5 @@
-﻿import Handlebars from 'handlebars';
-import input from './input.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './input.scss';
+import Input from './input.ts';
 
-Handlebars.registerPartial('Input', input);
+registerComponent(Input);

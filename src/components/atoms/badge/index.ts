@@ -1,4 +1,4 @@
-﻿import Handlebars from 'handlebars';
-import badge from './badge.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './badge.scss';
-Handlebars.registerPartial('Badge', badge);
+import Badge from './badge.ts';
+registerComponent(Badge);

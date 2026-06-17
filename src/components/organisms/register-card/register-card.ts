@@ -1,0 +1,24 @@
+import Block from '../../core/block.ts';
+
+export default class RegisterCard extends Block {
+  protected template = `
+  <div class="register-card">
+    <h1 class="hl">Регистрация</h1>
+    <form class="register-card__form">
+        <div class="register-card__fields">
+            {{{ Input id="email" name="email" type="email" label="Почта" }}}
+            {{{ Input id="login" name="login" type="text" label="Логин" }}}
+            {{{ Input id="first_name" name="first_name" type="text" label="Имя" }}}
+            {{{ Input id="second_name" name="second_name" type="text" label="Фамилия" }}}
+            {{{ Input id="phone" name="phone" type="tel" label="Телефон" }}}
+            {{{ Input id="password" name="password" type="password" label="Пароль" }}}
+            {{{ Input id="password_repeat" name="password_repeat" type="password" label="Пароль (ещё раз)" }}}
+        </div>
+        {{{ Button text="Зарегистрироваться" type="submit"}}}
+    </form>
+    {{{ Link text="Войти" data-page="login" }}}
+  </div>
+  `;
+
+  static componentName = 'RegisterCard';
+}

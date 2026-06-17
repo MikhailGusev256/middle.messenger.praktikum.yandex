@@ -1,4 +1,7 @@
-﻿import chatsTemplate from './chats.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './chats.scss';
+import Chats from './chats.ts';
 
-export default chatsTemplate;
+registerComponent(Chats);
+
+export default Chats;

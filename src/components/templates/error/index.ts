@@ -1,4 +1,7 @@
-import errorTemplate from './error.hbs?raw';
+import { registerComponent } from '../../core/registerComponent.ts';
 import './error.scss';
+import Error from './error.ts';
 
-export default errorTemplate;
+registerComponent(Error);
+
+export default Error;

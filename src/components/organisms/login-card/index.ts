@@ -1,7 +1,5 @@
-﻿import Handlebars from 'handlebars';
-
-import loginCard from './login-card.hbs?raw';
-
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './login-card.scss';
+import LoginCard from './login-card.ts';
 
-Handlebars.registerPartial('LoginCard', loginCard);
+registerComponent(LoginCard);
