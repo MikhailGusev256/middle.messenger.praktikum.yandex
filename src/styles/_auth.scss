@@ -1,4 +1,4 @@
-@mixin card {
+﻿@mixin card {
   width: 34rem;
   padding: 3rem;
   display: flex;
@@ -6,6 +6,7 @@
   align-items: center;
   box-shadow: var(--shadow-card);
   border-radius: 1.2rem;
+  gap: 1rem;
 }
 
 @mixin form {
