@@ -39,6 +39,8 @@ export default class App {
     const app = document.getElementById('app');
     if (!app) return;
 
+    app.textContent = '';
+
     const templateBlock = TemplateMap[this.state.currentPage];
     const context = ContextMap[this.state.currentPage];
     app.appendChild(templateBlock.element());

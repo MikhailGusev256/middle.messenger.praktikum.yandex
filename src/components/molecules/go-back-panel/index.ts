@@ -1,5 +1,5 @@
 ﻿import { registerComponent } from '../../core/registerComponent.ts';
-import ChatPreview from '../chat-preview/chat-preview.ts';
 import './go-back-panel.scss';
+import GoBackPanel from './go-back-panel.ts';
 
-registerComponent(ChatPreview);
+registerComponent(GoBackPanel);
