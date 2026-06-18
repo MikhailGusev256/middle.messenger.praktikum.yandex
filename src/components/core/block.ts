@@ -20,55 +20,20 @@ export interface ComponentClass {
 export default abstract class Block<
   Props extends BlockOwnProps = BlockOwnProps,
 > {
-  protected abstract template: string;
-
-  protected props = {} as Props;
+  protected children: Block<object>[] = [];
 
   private domElement: Element | null = null;
 
-  protected children: Block<object>[] = [];
+  protected events: EventListType = {};
+
+  protected props = {} as Props;
 
   protected refs: Record<string, Element> = {};
 
-  protected events: EventListType = {};
+  protected abstract template: string;
 
   constructor(props: Props = {} as Props) {
     this.props = props;
-  }
-
-  public element(): Element {
-    if (!this.domElement) {
-      this.domElement = this.render();
-    }
-    return this.domElement;
-  }
-
-  public setProps(props: Partial<Props>) {
-    this.props = {
-      ...this.props,
-      ...props,
-      __children: [],
-      __refs: {},
-    } as Props;
-    this.render();
-  }
-
-  protected componentDidMount() {}
-
-  private mountComponent() {
-    this.attachListeners();
-    this.componentDidMount();
-  }
-
-  protected componentWillUnmount() {}
-
-  private unmountComponent() {
-    if (this.domElement) {
-      this.children.reverse().forEach((child) => child.unmountComponent());
-
-      this.componentWillUnmount();
-      this.removeListeners();
-    }
   }
 
   private attachListeners() {
@@ -80,28 +45,6 @@ export default abstract class Block<
         this.domElement.addEventListener(eventName, eventCallback);
       }
     }
-  }
-
-  private removeListeners() {
-    if (!this.domElement) {
-      return;
-    }
-    for (const [eventName, eventCallback] of Object.entries(this.events)) {
-      if (typeof eventCallback === 'function') {
-        this.domElement.removeEventListener(eventName, eventCallback);
-      }
-    }
-  }
-
-  protected render(): Element {
-    this.unmountComponent();
-    const fragment = this.compile();
-    if (this.domElement && fragment) {
-      this.domElement.replaceWith(fragment);
-    }
-    this.domElement = fragment;
-    this.mountComponent();
-    return fragment;
   }
 
   private compile(): Element {
@@ -134,5 +77,62 @@ export default abstract class Block<
       throw new Error('Cannot create an element');
     }
     return result;
+  }
+
+  protected componentDidMount() {}
+
+  protected componentWillUnmount() {}
+
+  public element(): Element {
+    if (!this.domElement) {
+      this.domElement = this.render();
+    }
+    return this.domElement;
+  }
+
+  private mountComponent() {
+    this.attachListeners();
+    this.componentDidMount();
+  }
+
+  private removeListeners() {
+    if (!this.domElement) {
+      return;
+    }
+    for (const [eventName, eventCallback] of Object.entries(this.events)) {
+      if (typeof eventCallback === 'function') {
+        this.domElement.removeEventListener(eventName, eventCallback);
+      }
+    }
+  }
+
+  protected render(): Element {
+    this.unmountComponent();
+    const fragment = this.compile();
+    if (this.domElement && fragment) {
+      this.domElement.replaceWith(fragment);
+    }
+    this.domElement = fragment;
+    this.mountComponent();
+    return fragment;
+  }
+
+  public setProps(props: Partial<Props>) {
+    this.props = {
+      ...this.props,
+      ...props,
+      __children: [],
+      __refs: {},
+    } as Props;
+    this.render();
+  }
+
+  private unmountComponent() {
+    if (this.domElement) {
+      this.children.reverse().forEach((child) => child.unmountComponent());
+
+      this.componentWillUnmount();
+      this.removeListeners();
+    }
   }
 }

@@ -1,6 +1,8 @@
 import Block from '../../core/block.ts';
 
 export default class ChatPreview extends Block {
+  static componentName = 'ChatPreview';
+
   protected template = `
   <button type="button" class="chat-preview">
     {{{ Avatar name=name src=src }}}
@@ -16,6 +18,4 @@ export default class ChatPreview extends Block {
     </span>
   </button>
   `;
-
-  static componentName = 'ChatPreview';
 }

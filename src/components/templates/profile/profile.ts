@@ -1,6 +1,8 @@
 import Block from '../../core/block.ts';
 
 export default class Profile extends Block {
+  public static componentName = 'Profile';
+
   protected template = `
   <div class="profile-page">
     {{{ GoBackPanel }}}
@@ -19,12 +21,10 @@ export default class Profile extends Block {
             {{{ Input id="phone" name="phone" type="tel" label="Телефон" }}}
             {{{ Input id="old_password" name="old_password" type="password" label="Старый пароль" }}}
             {{{ Input id="new_password" name="new_password" type="password" label="Новый пароль" }}}
-            {{{ Button text="Сохранить" type="submit"}}}
+            {{{ Button text="Сохранить" type="submit" }}}
         </form>
         {{{ Link data-page="login" text="Выйти" danger=true }}}
     </main>
   </div>
   `;
-
-  public static componentName = 'Profile';
 }

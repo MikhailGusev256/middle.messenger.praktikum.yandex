@@ -1,6 +1,8 @@
 import Block from '../../core/block.ts';
 
 export default class Error extends Block {
+  static componentName = 'Error';
+
   protected template = `
   <main class="error-page">
     <h1 class="error-page__code">{{errorCode}}</h1>
@@ -8,6 +10,4 @@ export default class Error extends Block {
     {{{ Link text="Назад к чатам" data-page="chats" }}}
   </main>
   `;
-
-  static componentName = 'Error';
 }

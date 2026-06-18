@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "tsc && vite build && vite preview",
-    "build": "tsc && vite build",
+    "start": "tsc --noEmit && vite build && vite preview",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
@@ -24,6 +24,7 @@
     "@eslint/markdown": "^8.0.2",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-perfectionist": "^5.9.1",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "jiti": "^2.7.0",

@@ -6,7 +6,6 @@
 
 :root {
   --bg: #fff;
-
   --color-text: #1e1e1e;
   --color-text-muted: #999;
   --color-accent: #3369f3;
@@ -15,17 +14,15 @@
   --color-surface: #efefef;
   --color-surface-hover: #f7f7f7;
   --color-border: #eaeaea;
-  --shadow-card: 0 0 6px rgba(0, 0, 0, 0.14);
-
+  --shadow-card: 0 0 6px rgb(0 0 0 / 14%);
   --font-size-xl: 6rem;
   --font-size-l: 3rem;
   --font-size-m: 1.3rem;
   --font-size-s: 1.2rem;
   --font-size-xs: 1.1rem;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: system-ui, 'Segoe UI', roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', roboto, sans-serif;
+  --mono: ui-monospace, consolas, monospace;
 
   font-size: 62.5%;
   line-height: 145%;
@@ -34,7 +31,7 @@
   color-scheme: light dark;
   background: var(--bg);
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

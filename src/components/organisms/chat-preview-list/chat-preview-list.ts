@@ -1,6 +1,8 @@
 import Block from '../../core/block.ts';
 
 export default class ChatPreviewList extends Block {
+  static componentName = 'ChatPreviewList';
+
   protected template = `
   <aside class="chat-preview-list">
     <header class="chat-preview-list__header">
@@ -16,6 +18,4 @@ export default class ChatPreviewList extends Block {
     </ul>
   </aside>
   `;
-
-  static componentName = 'ChatPreviewList';
 }
