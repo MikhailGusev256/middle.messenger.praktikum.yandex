@@ -8,7 +8,13 @@ export interface ChatPreviewData {
   src?: string;
 }
 
-export const chats: ChatPreviewData[] = [
+export interface ChatMessage {
+  text: string;
+  out: boolean;
+  time: string;
+}
+
+const chats: ChatPreviewData[] = [
   {
     id: 1,
     name: 'Андрей',
@@ -75,3 +81,38 @@ export const chats: ChatPreviewData[] = [
     dateTime: '2020-04-12',
   },
 ];
+
+const chatMessages: ChatMessage[] = [
+  {
+    text: 'Привет! Смотри, тут всё работает. Помнишь, я делал?',
+    out: false,
+    time: '11:56',
+  },
+  {
+    text: 'Привет! Да, отличная работа, спасибо!',
+    out: true,
+    time: '11:58',
+  },
+  {
+    text: 'Круто 🤔 Я только начал делать, но виден прогресс. Заходи проверить как-нибудь.',
+    out: false,
+    time: '12:00',
+  },
+  {
+    text: 'Договорились, загляну на выходных.',
+    out: true,
+    time: '12:01',
+  },
+  {
+    text: 'И Human Interface Guidelines, и Material Design рекомендуют визуально отделять сообщения собеседника от своих.',
+    out: false,
+    time: '12:05',
+  },
+  {
+    text: 'Согласен, так читать гораздо удобнее.',
+    out: true,
+    time: '12:06',
+  },
+];
+
+export default { chats, chatMessages };

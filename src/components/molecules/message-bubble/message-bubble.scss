@@ -1,0 +1,26 @@
+.message-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-row--out {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  background: var(--color-bubble);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.message-bubble--out {
+  background: var(--color-bubble-out);
+}
+
+.message-bubble__time {
+  color: var(--color-bubble-time);
+}
+
+.message-bubble__time--out {
+  color: var(--color-bubble-time-out);
+}
