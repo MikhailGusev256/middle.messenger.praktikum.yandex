@@ -17,3 +17,12 @@
   color: var(--color-text);
   background: transparent;
 }
+
+.validation-error-text {
+  display: none;
+  color: var(--color-danger);
+}
+
+.validation-error-text--visible {
+  display: unset;
+}
