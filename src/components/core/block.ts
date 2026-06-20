@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
 
-interface BlockOwnProps {
+export interface BlockOwnProps {
   __children?: Array<{
     component: Block<object>;
     embed(node: DocumentFragment): void;

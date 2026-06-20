@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import esLintPrettier from 'eslint-config-prettier/flat';
 import perfectionListEsLint from 'eslint-plugin-perfectionist';
@@ -16,12 +15,6 @@ export default defineConfig([
     plugins: { js },
   },
   tseslint.configs.recommended,
-  {
-    extends: ['json/recommended'],
-    files: ['**/*.json'],
-    language: 'json/json',
-    plugins: { json },
-  },
   {
     extends: ['markdown/recommended'],
     files: ['**/*.md'],
