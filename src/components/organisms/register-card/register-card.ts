@@ -3,6 +3,19 @@ import Block from '../../core/block.ts';
 export default class RegisterCard extends Block {
   static componentName = 'RegisterCard';
 
+  protected events = {
+    submit: (e: Event) => {
+      e.preventDefault();
+      if (!(e.target instanceof HTMLFormElement)) {
+        return;
+      }
+      const form = e.target as HTMLFormElement;
+      const data = new FormData(form);
+      const obj = Object.fromEntries(data);
+      console.log(obj);
+    },
+  };
+
   protected template = `
   <div class="register-card">
     <h1 class="hl">Регистрация</h1>

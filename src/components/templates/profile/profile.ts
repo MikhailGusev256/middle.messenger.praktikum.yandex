@@ -27,6 +27,17 @@ export default class Profile extends Block<ProfileProps> {
         this.setProps({ targetMode });
       }
     },
+
+    submit: (e: Event) => {
+      e.preventDefault();
+      if (!(e.target instanceof HTMLFormElement)) {
+        return;
+      }
+      const form = e.target as HTMLFormElement;
+      const data = new FormData(form);
+      const obj = Object.fromEntries(data);
+      console.log(obj);
+    },
   };
 
   protected template = `
