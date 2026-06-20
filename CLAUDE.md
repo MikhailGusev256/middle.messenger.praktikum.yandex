@@ -29,18 +29,30 @@ npm run dev       # start dev server (Vite HMR)
 ## Architecture
 
 - **Entry point**: `index.html` → `src/main.ts`
-- **App mount**: `document.querySelector('#app')` — the single `<div id="app">` in index.html is where all UI is injected
+- **App mount**: `document.getElementById('app')` — the single `<div id="app">` in index.html is where all UI is injected
 - **No framework**: vanilla TypeScript + Vite, no React/Vue/Angular
 - **TypeScript**: strict mode with `noUnusedLocals`, `noUnusedParameters`, `noEmit` (Vite handles compilation)
 
 ## Component architecture
 
-- **Atomic design**: `src/components/{atoms,molecules,organisms,templates}`. Each component is a folder with `name.hbs` + `name.scss` + `index.ts`.
-- **Each `index.ts`** imports `./name.hbs?raw` and `./name.scss`, then registers a Handlebars partial: `Handlebars.registerPartial('Name', tmpl)`. Components compose others via `{{> Partial arg="..."}}`.
-- **Partial names are a single global registry** — they must be unique (two `registerPartial` calls with the same name silently clobber each other).
-- **Barrel `index.ts`** files (`atoms/index.ts`, `molecules/index.ts`, …) import every component for its registration side effect. A new component is invisible until added to its barrel.
-- **Templates** export the raw `.hbs` string and are wired into `templates/index.ts` (`TemplateName` union, `TemplateMap`, `ContextMap`). `App` (`app.ts`) compiles the current page's template with its context and injects it into `#app`.
-- **Static assets (SVG)**: import with `?raw` and register as a partial to inline them.
+The project uses a **class-based reactive component model**. The core lives in `src/components/core/`:
+
+- **`block.ts`** — abstract `Block<Props>` base class (the analog of a Blazor `ComponentBase`). A component subclass declares:
+  - `template` — a Handlebars string (rendered against `this.props`).
+  - `props`, `events`, `refs`, `children` — instance state. `events` maps an event name to a handler attached to the component's **root** element; `refs` is populated from `ref="name"` attributes in the template.
+  - lifecycle hooks `componentDidMount()` / `componentWillUnmount()` (override as needed).
+  - `element()` lazily compiles and returns the root DOM node; `setProps(partial)` merges props and re-renders, replacing the old node in place (`replaceWith`). `render()` recompiles the template, embeds child components, and (re)attaches listeners.
+- **`registerComponent.ts`** — `registerComponent(Component)` registers a Handlebars **helper** named `Component.componentName`. In a template you invoke a child with a triple-stache helper call: `{{{ Button text="Сохранить" type="submit" }}}`. The helper instantiates the child, returns a placeholder `<div data-component-hbs-id="N">`, and collects the instance into the root render data (`__children` / `__refs`). The parent's `compile()` then swaps each placeholder for the child's real element. Use `ref="..."` in the helper call to capture a child into `this.refs`.
+
+Conventions:
+
+- **Atomic design**: `src/components/{atoms,molecules,organisms,templates}`. Each component is a folder with `name.ts` + `name.scss` + `index.ts`.
+- **`name.ts`** — `export default class Name extends Block { static componentName = 'Name'; protected template = \`...\`; }`. The `componentName` is the helper name used in other templates and **must be unique** across the global Handlebars helper registry.
+- **`index.ts`** — imports `./name.scss`, imports the class, and calls `registerComponent(Name)` for its side effect. Template folders also `export default` the class.
+- **Barrel `index.ts`** files (`atoms/index.ts`, `molecules/index.ts`, …) import every component folder for its registration side effect. A new component is invisible until added to its barrel; barrels are imported by `app.ts`.
+- **`helpers/`** — plain Handlebars helpers (e.g. `firstLetter`), registered the same way via their own barrel.
+- **Templates** (pages) are themselves `Block` subclasses, wired into `templates/index.ts`: `TemplateName` union, `TemplateMap` (instantiated `Block`s keyed by page), `ContextMap` (per-page props). `App` (`app.ts`) appends the current page's `element()` to `#app` and calls `setProps(context)`; `main.ts` bootstraps with `new App().render()`.
+- **Static assets (SVG)**: import with `?raw` and inline them (e.g. via a component template or helper).
 
 ## CSS Principles
 
