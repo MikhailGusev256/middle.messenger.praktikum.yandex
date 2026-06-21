@@ -3,6 +3,7 @@ import isProfileMode, { type ProfileModes } from './view-modes.ts';
 
 interface ProfileProps extends BlockOwnProps {
   targetMode: ProfileModes;
+  changeToViewMode: () => void;
 }
 
 export default class Profile extends Block<ProfileProps> {
@@ -30,11 +31,11 @@ export default class Profile extends Block<ProfileProps> {
         
         <div class="profile__data-and-link-separator">
           {{#ifEquals targetMode "edit-password"}}
-            {{{ EditPasswordForm }}}
+            {{{ EditPasswordForm onDone=changeToViewMode }}}
           {{/ifEquals}}
           
           {{#ifEquals targetMode "edit-profile"}}
-            {{{ EditProfileForm }}}
+            {{{ EditProfileForm onDone=changeToViewMode }}}
           {{/ifEquals}}
           
           {{#ifEquals targetMode "view"}}
@@ -57,5 +58,6 @@ export default class Profile extends Block<ProfileProps> {
   constructor() {
     super();
     this.props.targetMode = 'view';
+    this.props.changeToViewMode = () => this.setProps({ targetMode: 'view' });
   }
 }

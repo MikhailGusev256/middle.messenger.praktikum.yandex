@@ -1,7 +1,11 @@
 import Input from '../molecules/input/input.ts';
-import Block from './block.ts';
+import Block, { type BlockOwnProps } from './block.ts';
 
-export default abstract class Form extends Block {
+interface FormProps extends BlockOwnProps {
+  onDone?: (e: Event) => void;
+}
+
+export default abstract class Form extends Block<FormProps> {
   protected events = {
     submit: (e: Event) => {
       e.preventDefault();
@@ -19,12 +23,16 @@ export default abstract class Form extends Block {
         const form = e.target as HTMLFormElement;
         const data = new FormData(form);
         const obj = Object.fromEntries(data);
-        this.onValidSubmit(obj);
+        this.onValidSubmit(e, obj);
       }
     },
   };
 
-  protected onValidSubmit(data: Record<string, FormDataEntryValue>): void {
+  protected onValidSubmit(
+    e: Event,
+    data: Record<string, FormDataEntryValue>,
+  ): void {
     console.log(data);
+    this.props.onDone?.(e);
   }
 }
