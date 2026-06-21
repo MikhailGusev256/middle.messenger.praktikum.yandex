@@ -3,7 +3,3 @@
 .login-card {
   @include auth.card;
 }
-
-.login-card__form {
-  @include auth.form;
-}

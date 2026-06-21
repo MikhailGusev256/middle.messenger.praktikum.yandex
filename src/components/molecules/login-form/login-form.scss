@@ -1,0 +1,5 @@
+@use 'styles/auth' as auth;
+
+.login-card__form {
+  @include auth.form;
+}
