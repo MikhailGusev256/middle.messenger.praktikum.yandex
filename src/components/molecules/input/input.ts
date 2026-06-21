@@ -2,7 +2,7 @@ import validate, { type ValidationKey } from '../../../utils/validation.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
 
 interface InputProps extends BlockOwnProps {
-  validationRule: ValidationKey;
+  validationRule?: ValidationKey;
 }
 
 export default class Input extends Block<InputProps> {
