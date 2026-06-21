@@ -4,7 +4,13 @@ interface ValidationPair {
   regex: string;
   error: string;
 }
-type ValidationKey = 'login' | 'password' | 'name' | 'email' | 'phone';
+type ValidationKey =
+  | 'login'
+  | 'password'
+  | 'name'
+  | 'email'
+  | 'phone'
+  | 'notEmpty';
 
 const validationPairs: Record<ValidationKey, ValidationPair> = {
   login: {
@@ -26,6 +32,10 @@ const validationPairs: Record<ValidationKey, ValidationPair> = {
   phone: {
     regex: '^\\+?\\d{10,15}$',
     error: '10–15 цифр',
+  },
+  notEmpty: {
+    regex: '.+',
+    error: 'Поле не должно быть пустым',
   },
 };
 
