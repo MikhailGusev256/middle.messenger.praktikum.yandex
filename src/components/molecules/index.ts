@@ -4,3 +4,4 @@ import './input';
 import './login-form';
 import './message-bubble';
 import './message-input';
+import './register-form';

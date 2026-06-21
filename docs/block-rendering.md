@@ -26,7 +26,7 @@
 он лишь регистрирует в Handlebars **хелпер** с именем `Input` и закрепляет за классом
 уникальный плейсхолдер-id.
 
-```
+```text
 registerComponent(Input)
         │
         ├─ uniqueId++  →  dataAttribute = 'data-component-hbs-id="1"'   (фиксируется в замыкании)
@@ -75,7 +75,7 @@ sequenceDiagram
 
 ### Что именно делает `compile()` (block.ts:50)
 
-```
+```text
 this.props ──────────────► становится data.root внутри хелперов
      │
      ▼
@@ -96,7 +96,7 @@ HTML-строка:
 
 После строки рендерятся два шага:
 
-```
+```text
 1) this.children = __children.map(c => c.component)   // [Input, Button] — для жизненного цикла
 2) __children.forEach(child => child.embed(fragment)) // замена плейсхолдеров на реальные узлы
 3) this.refs = querySelectorAll('[ref]') (+ __refs)   // элементные ref внутри ЭТОГО шаблона
@@ -108,7 +108,7 @@ HTML-строка:
 
 Когда Handlebars дошёл до `{{{ Input ... ref="input" }}}`:
 
-```
+```text
 hash = { aria-label, validation-regex, type, name, ..., ref: "input" }
 
 function helper({ hash, data }) {
@@ -137,7 +137,7 @@ function helper({ hash, data }) {
 
 `embed` — это «вклеить готовый узел вместо заглушки»:
 
-```
+```text
 embed(fragment):
     placeholder = fragment.querySelector('[data-component-hbs-id="1"]')
     element     = component.element()      // тот же узел (element() кэширует domElement)
@@ -146,7 +146,7 @@ embed(fragment):
 
 Визуально превращение фрагмента:
 
-```
+```text
 ДО embed:                            ПОСЛЕ embed:
 <form class="message-input">         <form class="message-input">
   <div data-component-hbs-id="1">      <div class="input"> … <input> … </div>
@@ -162,7 +162,7 @@ embed(fragment):
 
 ## Полная картина: дерево вызовов
 
-```
+```text
 new MessageInput().element()
 └─ render()
    └─ compile()                                   [block.ts:50]

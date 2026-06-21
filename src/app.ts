@@ -15,7 +15,7 @@ export default class App {
 
   constructor() {
     this.state = {
-      currentPage: 'login',
+      currentPage: 'register',
     };
   }
 

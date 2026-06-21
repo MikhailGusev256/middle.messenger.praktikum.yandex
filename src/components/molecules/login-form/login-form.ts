@@ -11,8 +11,8 @@ export default class LoginForm extends Form {
             name="login" 
             type="text" 
             label="Логин" 
-            validation-regex="^(?=.*[a-zA-Z_-])[a-zA-Z0-9_-]{3,20}$"
-            validation-error-text="Неверный формат логина"
+            validation-regex=(validationRegex "login")
+            validation-error-text=(validationError "login")
             aria-label="Логин"
             autocomplete="true" }}}
         {{{ Input 
@@ -21,8 +21,8 @@ export default class LoginForm extends Form {
             type="password" 
             label="Пароль" 
             aria-label="Пароль"
-            validation-regex="^(?=.*[A-Z])(?=.*\\d).{8,40}$"
-            validation-error-text="Неверный формат пароля"
+            validation-regex=(validationRegex "password")
+            validation-error-text=(validationError "password")
             autocomplete="true" }}}
     </div>
     {{{ Button text="Авторизоваться" type="submit" }}}
