@@ -1,6 +1,6 @@
-import FormTemplate from '../form-template/form-template.ts';
+import Form from '../../core/form.ts';
 
-export default class MessageInput extends FormTemplate {
+export default class MessageInput extends Form {
   static componentName = 'MessageInput';
 
   protected template = `

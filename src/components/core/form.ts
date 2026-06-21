@@ -1,7 +1,7 @@
-import Block from '../../core/block.ts';
-import Input from '../input/input.ts';
+import Input from '../molecules/input/input.ts';
+import Block from './block.ts';
 
-export default abstract class FormTemplate extends Block {
+export default abstract class Form extends Block {
   protected events = {
     submit: (e: Event) => {
       e.preventDefault();
