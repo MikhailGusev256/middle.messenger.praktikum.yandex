@@ -14,7 +14,8 @@
     "lint:js:fix": "eslint --fix .",
     "lint:css": "stylelint **/*.scss",
     "lint:css:fix": "stylelint --fix **/*.scss",
-    "lint": "npm run format && npm run lint:css && npm run lint:js",
+    "lint:types": "tsc --noEmit",
+    "lint": "npm run format && npm run lint:types && npm run lint:css && npm run lint:js",
     "lint:fix": "npm run format:fix && npm run lint:css:fix && npm run lint:js:fix",
     "prepare": "husky"
   },
