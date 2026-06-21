@@ -19,7 +19,7 @@ export default class Profile extends Block<ProfileProps> {
       }
       const targetMode = modeElement.dataset.pageMode;
       if (isProfileMode(targetMode)) {
-        this.setProps({ targetMode });
+        this.setMode(targetMode);
       }
     },
   };
@@ -58,6 +58,10 @@ export default class Profile extends Block<ProfileProps> {
   constructor() {
     super();
     this.props.targetMode = 'view';
-    this.props.changeToViewMode = () => this.setProps({ targetMode: 'view' });
+    this.props.changeToViewMode = () => this.setMode('view');
+  }
+
+  private setMode(mode: ProfileModes): void {
+    this.setProps({ targetMode: mode });
   }
 }

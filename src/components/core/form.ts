@@ -1,3 +1,4 @@
+import logger from '../../services/log/console-logger.ts';
 import Input from '../molecules/input/input.ts';
 import Block, { type BlockOwnProps } from './block.ts';
 
@@ -32,7 +33,7 @@ export default abstract class Form extends Block<FormProps> {
     e: Event,
     data: Record<string, FormDataEntryValue>,
   ): void {
-    console.log(data);
+    logger.log(data);
     this.props.onDone?.(e);
   }
 }
