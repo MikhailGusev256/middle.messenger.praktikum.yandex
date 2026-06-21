@@ -1,6 +1,6 @@
-﻿import type Block from '../core/block.ts';
+﻿import chatService from '../../services/chat/chat-service.ts';
+import type Block from '../core/block.ts';
 import chatsTmpl from './chats';
-import chatData from './chats/data';
 import errorTmpl from './error';
 import loginTmpl from './login';
 import profileTmpl from './profile';
@@ -13,6 +13,11 @@ export type TemplateName =
   | 'profile'
   | 'error404'
   | 'error500';
+
+const chatData = {
+  chats: chatService.getChatPreviews(),
+  chatMessages: chatService.getChatMessages(),
+};
 
 export const TemplateMap: Record<TemplateName, Block> = {
   login: new loginTmpl(),
