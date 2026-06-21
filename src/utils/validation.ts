@@ -5,7 +5,7 @@ interface ValidationPair {
 
 const validationPairs = {
   login: {
-    regex: '^(?=.*[a-zA-Z_-])[a-zA-Z0-9_-]{3,20}$',
+    regex: '^(?=.*[a-zA-Z])[a-zA-Z0-9_-]{3,20}$',
     error: 'Минимум 3 символа, латиница, без пробелов',
   },
   password: {
@@ -21,8 +21,8 @@ const validationPairs = {
     error: 'Email должен быть валидный',
   },
   phone: {
-    regex: '^\\+?\\d{10,15}$',
-    error: '10–15 цифр',
+    regex: '^(?=.{10,15}$)\\+?\\d+$',
+    error: '10–15 символов, цифры, может начинаться с плюса',
   },
   notEmpty: {
     regex: '.+',
