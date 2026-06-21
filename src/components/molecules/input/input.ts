@@ -3,6 +3,23 @@ import Block from '../../core/block.ts';
 export default class Input extends Block {
   static componentName = 'Input';
 
+  public isValid = (): boolean => {
+    const input = this.refs.input as HTMLInputElement;
+    const validationRegex = input.dataset.validationRegex;
+    if (!validationRegex) {
+      return true;
+    }
+    const regExp = new RegExp(validationRegex);
+    const passes = regExp.test(input.value);
+    const validationErrorClass = 'validation-error-text--visible';
+    if (passes) {
+      this.refs.validation.classList.remove(validationErrorClass);
+    } else {
+      this.refs.validation.classList.add(validationErrorClass);
+    }
+    return passes;
+  };
+
   protected template = `
   <div class="input">
     {{#if label}}
@@ -24,32 +41,13 @@ export default class Input extends Block {
   </div>
   `;
 
-  private validate = (e: Event) => {
-    if (!(e.target instanceof HTMLInputElement)) {
-      return;
-    }
-    const input = e.target as HTMLInputElement;
-    const validationRegex = input.dataset.validationRegex;
-    if (!validationRegex) {
-      return;
-    }
-    const regExp = new RegExp(validationRegex);
-    const passes = regExp.test(input.value);
-    const validationErrorClass = 'validation-error-text--visible';
-    if (passes) {
-      this.refs.validation.classList.remove(validationErrorClass);
-    } else {
-      this.refs.validation.classList.add(validationErrorClass);
-    }
-  };
-
   protected componentDidMount() {
     super.componentDidMount();
-    this.refs.input.addEventListener('blur', this.validate);
+    this.refs.input.addEventListener('blur', this.isValid);
   }
 
   protected componentWillUnmount() {
     super.componentWillUnmount();
-    this.refs.input.removeEventListener('blur', this.validate);
+    this.refs.input.removeEventListener('blur', this.isValid);
   }
 }

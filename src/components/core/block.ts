@@ -48,6 +48,7 @@ export default abstract class Block<
   }
 
   private compile(): Element {
+    // this.props становится data.root внутри хелперов
     const html = Handlebars.compile(this.template)(this.props);
     const templateElement = document.createElement('template');
     templateElement.innerHTML = html;

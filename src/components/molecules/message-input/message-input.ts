@@ -1,20 +1,7 @@
-import Block from '../../core/block.ts';
+import FormTemplate from '../form-template/form-template.ts';
 
-export default class MessageInput extends Block {
+export default class MessageInput extends FormTemplate {
   static componentName = 'MessageInput';
-
-  protected events = {
-    submit: (e: Event) => {
-      e.preventDefault();
-      if (!(e.target instanceof HTMLFormElement)) {
-        return;
-      }
-      const form = e.target as HTMLFormElement;
-      const data = new FormData(form);
-      const obj = Object.fromEntries(data);
-      console.log(obj);
-    },
-  };
 
   protected template = `
   <form class="message-input">
@@ -25,7 +12,8 @@ export default class MessageInput extends Block {
     type="text" 
     name="message" 
     placeholder="Сообщение" 
-    autocomplete="off" }}}
+    autocomplete="off" 
+    ref="input"}}}
     {{{ Button text="Отправить" type="submit"}}}
   </form>
   `;
