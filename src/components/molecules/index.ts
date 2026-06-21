@@ -1,4 +1,6 @@
 ﻿import './chat-preview';
+import './edit-password-form';
+import './edit-profile-form';
 import './go-back-panel';
 import './input';
 import './login-form';
