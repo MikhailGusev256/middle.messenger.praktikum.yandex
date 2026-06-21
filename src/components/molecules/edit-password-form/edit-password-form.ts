@@ -11,8 +11,7 @@ export default class EditPasswordForm extends Form {
             type="password" 
             label="Старый пароль" 
             aria-label="Старый пароль"
-            validation-regex=(validationRegex "password")
-            validation-error-text=(validationError "password")
+            validationRule="password"
             autocomplete="false" }}}
                 
         {{{ Input 
@@ -21,8 +20,7 @@ export default class EditPasswordForm extends Form {
             type="password" 
             label="Новый пароль" 
             aria-label="Новый пароль"
-            validation-regex=(validationRegex "password")
-            validation-error-text=(validationError "password")
+            validationRule="password"
             autocomplete="false" }}}
             
         {{{ Input 
@@ -31,8 +29,7 @@ export default class EditPasswordForm extends Form {
             type="password" 
             label="Повторите новый пароль" 
             aria-label="Повторите новый пароль"
-            validation-regex=(validationRegex "password")
-            validation-error-text=(validationError "password")
+            validationRule="password"
             autocomplete="false" }}}
         
         {{{ Button text="Сохранить" type="submit" }}}

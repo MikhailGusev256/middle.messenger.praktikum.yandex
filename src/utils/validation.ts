@@ -1,18 +1,9 @@
-import Handlebars from 'handlebars';
-
 interface ValidationPair {
   regex: string;
   error: string;
 }
-type ValidationKey =
-  | 'login'
-  | 'password'
-  | 'name'
-  | 'email'
-  | 'phone'
-  | 'notEmpty';
 
-const validationPairs: Record<ValidationKey, ValidationPair> = {
+const validationPairs = {
   login: {
     regex: '^(?=.*[a-zA-Z_-])[a-zA-Z0-9_-]{3,20}$',
     error: 'Минимум 3 символа, латиница, без пробелов',
@@ -37,22 +28,24 @@ const validationPairs: Record<ValidationKey, ValidationPair> = {
     regex: '.+',
     error: 'Поле не должно быть пустым',
   },
-};
+} satisfies Record<string, ValidationPair>;
+
+export type ValidationKey = keyof typeof validationPairs;
+
+export default function validate(
+  validationRule: ValidationKey,
+  value: string,
+): { isValid: boolean; errorMessage: string } {
+  if (!isValidName(validationRule)) {
+    console.log('Передано некорректное правило валидации');
+    return { isValid: true, errorMessage: '' };
+  }
+  const validationPair = validationPairs[validationRule];
+  const regExp = new RegExp(validationPair.regex);
+  const passes = regExp.test(value);
+  return { isValid: passes, errorMessage: passes ? '' : validationPair.error };
+}
 
 function isValidName(value: string | undefined): value is ValidationKey {
   return value !== undefined && value in validationPairs;
 }
-
-Handlebars.registerHelper('validationRegex', (value: string) => {
-  if (isValidName(value)) {
-    const pair = validationPairs[value];
-    return pair.regex;
-  }
-});
-
-Handlebars.registerHelper('validationError', (value: string) => {
-  if (isValidName(value)) {
-    const pair = validationPairs[value];
-    return pair.error;
-  }
-});

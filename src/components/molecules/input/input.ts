@@ -1,23 +1,31 @@
-import Block from '../../core/block.ts';
+import validate, { type ValidationKey } from '../../../utils/validation.ts';
+import Block, { type BlockOwnProps } from '../../core/block.ts';
 
-export default class Input extends Block {
+interface InputProps extends BlockOwnProps {
+  validationRule: ValidationKey;
+}
+
+export default class Input extends Block<InputProps> {
   static componentName = 'Input';
 
   public isValid = (): boolean => {
-    const input = this.refs.input as HTMLInputElement;
-    const validationRegex = input.dataset.validationRegex;
-    if (!validationRegex) {
+    const validationRule = this.props.validationRule;
+    if (!validationRule) {
       return true;
     }
-    const regExp = new RegExp(validationRegex);
-    const passes = regExp.test(input.value);
+    const input = this.refs.input as HTMLInputElement;
+    const { isValid, errorMessage } = validate(validationRule, input.value);
+
     const validationErrorClass = 'validation-error-text--visible';
-    if (passes) {
-      this.refs.validation.classList.remove(validationErrorClass);
+    const validationDisplay = this.refs.validation;
+    if (isValid) {
+      validationDisplay.textContent = '';
+      validationDisplay.classList.remove(validationErrorClass);
     } else {
-      this.refs.validation.classList.add(validationErrorClass);
+      validationDisplay.classList.add(validationErrorClass);
+      validationDisplay.textContent = errorMessage;
     }
-    return passes;
+    return isValid;
   };
 
   protected template = `
@@ -31,13 +39,10 @@ export default class Input extends Block {
       type="{{type}}" 
       name="{{name}}" 
       ref="input" 
-      data-validation-regex="{{validation-regex}}"
       aria-label="{{aria-label}}"
       placeholder="{{placeholder}}"
       autocomplete="{{autocomplete}}"/>
-    <span 
-        class="validation-error-text" 
-        ref="validation">{{validation-error-text}}</span>
+    <span class="validation-error-text" ref="validation"></span>
   </div>
   `;
 

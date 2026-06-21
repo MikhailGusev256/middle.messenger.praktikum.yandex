@@ -11,40 +11,35 @@ export default class EditProfileForm extends Form {
             name="email" 
             type="email" 
             label="Почта"
-            validation-regex=(validationRegex "email") 
-            validation-error-text=(validationError "email")  }}}
+            validationRule="email" }}}
             
         {{{ Input 
             id="login" 
             name="login" 
             type="text" 
             label="Логин" 
-            validation-regex=(validationRegex "login")
-            validation-error-text=(validationError "login")
+            validationRule="login"
             aria-label="Логин"
             autocomplete="true" }}}
             
         {{{ Input 
             id="first_name" 
             name="first_name" 
-            validation-regex=(validationRegex "name")
-            validation-error-text=(validationError "name")
+            validationRule="name"
             type="text" 
             label="Имя" }}}
                 
         {{{ Input 
             id="second_name" 
             name="second_name" 
-            validation-regex=(validationRegex "name")
-            validation-error-text=(validationError "name")
+            validationRule="name"
             type="text" 
             label="Фамилия" }}}
         
         {{{ Input 
             id="display_name" 
             name="display_name" 
-            validation-regex=(validationRegex "name")
-            validation-error-text=(validationError "name")
+            validationRule="name"
             type="text" 
             label="Имя в чате" }}}
             
@@ -53,8 +48,7 @@ export default class EditProfileForm extends Form {
             name="phone" 
             type="tel" 
             label="Телефон"
-            validation-regex=(validationRegex "phone")
-            validation-error-text=(validationError "phone") }}}
+            validationRule="phone" }}}
             
         {{{ Button text="Сохранить" type="submit" }}}
     </form>

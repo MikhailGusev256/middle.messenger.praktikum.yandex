@@ -11,8 +11,7 @@ export default class LoginForm extends Form {
             name="login" 
             type="text" 
             label="Логин" 
-            validation-regex=(validationRegex "login")
-            validation-error-text=(validationError "login")
+            validationRule="login"
             aria-label="Логин"
             autocomplete="true" }}}
         {{{ Input 
@@ -21,8 +20,7 @@ export default class LoginForm extends Form {
             type="password" 
             label="Пароль" 
             aria-label="Пароль"
-            validation-regex=(validationRegex "password")
-            validation-error-text=(validationError "password")
+            validationRule="password"
             autocomplete="true" }}}
     </div>
     {{{ Button text="Авторизоваться" type="submit" }}}

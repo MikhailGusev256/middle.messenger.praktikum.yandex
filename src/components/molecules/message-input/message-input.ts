@@ -6,8 +6,7 @@ export default class MessageInput extends Form {
   protected template = `
   <form class="message-input">
     {{{ Input aria-label="Сообщение" 
-    validation-regex=(validationRegex "notEmpty")
-    validation-error-text=(validationError "notEmpty")
+    validationRule="notEmpty"
     class="message-input__field" 
     type="text" 
     name="message" 
