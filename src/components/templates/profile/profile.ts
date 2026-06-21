@@ -11,26 +11,15 @@ export default class Profile extends Block<ProfileProps> {
   protected events = {
     click: (e: Event) => {
       const modeElement = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-profile-mode]',
+        '[data-page-mode]',
       );
       if (!modeElement) {
         return;
       }
-      const targetMode = modeElement.dataset.profileMode;
+      const targetMode = modeElement.dataset.pageMode;
       if (isProfileMode(targetMode)) {
         this.setProps({ targetMode });
       }
-    },
-
-    submit: (e: Event) => {
-      e.preventDefault();
-      if (!(e.target instanceof HTMLFormElement)) {
-        return;
-      }
-      const form = e.target as HTMLFormElement;
-      const data = new FormData(form);
-      const obj = Object.fromEntries(data);
-      console.log(obj);
     },
   };
 
@@ -38,21 +27,35 @@ export default class Profile extends Block<ProfileProps> {
   <div class="profile-page">
     {{{ GoBackPanel }}}
     <main class="profile">
-        <div class="profile__header">
-            {{{ Avatar name="Иван"}}}
-            <h1 class="hl">Иван</h1>
-        </div>
+        
         <div class="profile__data-and-link-separator">
-          {{{ EditPasswordForm }}}
-          {{{ EditProfileForm }}}
+          {{#ifEquals targetMode "edit-password"}}
+            {{{ EditPasswordForm }}}
+          {{/ifEquals}}
           
-          <div class="profile__link-wrapper">
-            {{{ Link data-profile-mode="login" text="Изменить данные" }}}
-            {{{ Link data-profile-mode="login" text="Изменить пароль" }}}
-            {{{ Link data-page="login" text="Выйти" danger=true }}}
-          </div>
+          {{#ifEquals targetMode "edit-profile"}}
+            {{{ EditProfileForm }}}
+          {{/ifEquals}}
+          
+          {{#ifEquals targetMode "view"}}
+            <div class="profile__header">
+                {{{ Avatar name="Иван"}}}
+                <h1 class="hl">Иван</h1>
+            </div>
+            <div class="profile__link-wrapper">
+              {{{ Link data-page-mode="edit-profile" text="Изменить данные" }}}
+              {{{ Link data-page-mode="edit-password" text="Изменить пароль" }}}
+              {{{ Link data-page="login" text="Выйти" danger=true }}}
+            </div>
+          {{/ifEquals}}
+          
         </div>
     </main>
   </div>
   `;
+
+  constructor() {
+    super();
+    this.props.targetMode = 'view';
+  }
 }

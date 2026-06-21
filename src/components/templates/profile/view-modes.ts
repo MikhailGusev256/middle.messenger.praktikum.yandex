@@ -1,4 +1,4 @@
-const PROFILE_MODES = ['view', 'editPassword', 'editPersonal'] as const;
+const PROFILE_MODES = ['view', 'edit-password', 'edit-profile'] as const;
 export type ProfileModes = (typeof PROFILE_MODES)[number];
 
 export default function isProfileMode(

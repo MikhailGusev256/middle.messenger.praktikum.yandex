@@ -1,2 +1,3 @@
-﻿import './firstLetter.ts';
+﻿import './equals.ts';
+import './firstLetter.ts';
 import './validation.ts';
