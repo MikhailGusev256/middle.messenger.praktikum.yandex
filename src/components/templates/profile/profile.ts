@@ -1,14 +1,8 @@
 import Block, { type BlockOwnProps } from '../../core/block.ts';
-
-const PROFILE_MODES = ['view', 'editPassword', 'editPersonal'] as const;
-type ProfileModes = (typeof PROFILE_MODES)[number];
+import isProfileMode, { type ProfileModes } from './view-modes.ts';
 
 interface ProfileProps extends BlockOwnProps {
   targetMode: ProfileModes;
-}
-
-function isProfileMode(value: string | undefined): value is ProfileModes {
-  return value !== undefined && PROFILE_MODES.includes(value as ProfileModes);
 }
 
 export default class Profile extends Block<ProfileProps> {
