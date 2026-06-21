@@ -23,7 +23,7 @@ export default class Input extends Block {
   protected template = `
   <div class="input">
     {{#if label}}
-    <label class="input__label" for="{{id}}">{{label}}</label>
+        <label class="input__label" for="{{id}}">{{label}}</label>
     {{/if}}
     <input 
       class="input__field" 
