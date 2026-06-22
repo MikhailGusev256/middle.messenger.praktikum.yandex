@@ -10,5 +10,9 @@
 }
 
 .chats-page__history {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   flex: 1;
+  gap: 1rem;
 }

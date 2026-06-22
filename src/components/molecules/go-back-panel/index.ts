@@ -1,7 +1,5 @@
-﻿import Handlebars from 'handlebars';
-
-import goBackPanel from './go-back-panel.hbs?raw';
-
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './go-back-panel.scss';
+import GoBackPanel from './go-back-panel.ts';
 
-Handlebars.registerPartial('GoBackPanel', goBackPanel);
+registerComponent(GoBackPanel);

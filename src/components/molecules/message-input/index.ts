@@ -1,6 +1,5 @@
-import Handlebars from 'handlebars';
-
-import messageInput from './message-input.hbs?raw';
+import { registerComponent } from '../../core/registerComponent.ts';
 import './message-input.scss';
+import MessageInput from './message-input.ts';
 
-Handlebars.registerPartial('MessageInput', messageInput);
+registerComponent(MessageInput);

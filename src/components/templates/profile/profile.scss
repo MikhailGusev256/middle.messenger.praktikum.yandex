@@ -19,9 +19,14 @@
   gap: 1rem;
 }
 
-.profile__form {
+.profile__data-and-link-separator {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.profile__link-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 30rem;
 }

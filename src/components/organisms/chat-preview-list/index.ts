@@ -1,6 +1,5 @@
-﻿import Handlebars from 'handlebars';
-
-import chatPreviewList from './chat-preview-list.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './chat-preview-list.scss';
+import ChatPreviewList from './chat-preview-list.ts';
 
-Handlebars.registerPartial('ChatPreviewList', chatPreviewList);
+registerComponent(ChatPreviewList);

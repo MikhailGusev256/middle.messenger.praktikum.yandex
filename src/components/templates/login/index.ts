@@ -1,3 +1,6 @@
-﻿import loginTemplate from './login.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
+import Login from './login.ts';
 
-export default loginTemplate;
+registerComponent(Login);
+
+export default Login;

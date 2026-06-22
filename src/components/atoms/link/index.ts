@@ -1,5 +1,5 @@
-﻿import Handlebars from 'handlebars';
-import link from './link.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './link.scss';
+import Link from './link.ts';
 
-Handlebars.registerPartial('Link', link);
+registerComponent(Link);

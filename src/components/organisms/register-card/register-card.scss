@@ -3,7 +3,3 @@
 .register-card {
   @include auth.card;
 }
-
-.register-card__form {
-  @include auth.form;
-}

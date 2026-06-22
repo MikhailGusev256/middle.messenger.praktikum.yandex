@@ -1,5 +1,5 @@
-﻿import Handlebars from 'handlebars';
-import registerCard from './register-card.hbs?raw';
+﻿import { registerComponent } from '../../core/registerComponent.ts';
 import './register-card.scss';
+import RegisterCard from './register-card.ts';
 
-Handlebars.registerPartial('RegisterCard', registerCard);
+registerComponent(RegisterCard);
