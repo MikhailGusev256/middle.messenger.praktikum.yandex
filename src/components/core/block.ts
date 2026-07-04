@@ -17,22 +17,20 @@ export interface ComponentClass {
   componentName: string;
 }
 
-export default abstract class Block<
-  Props extends BlockOwnProps = BlockOwnProps,
-> {
+export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
   protected children: Block<object>[] = [];
 
   private domElement: Element | null = null;
 
   protected events: EventListType = {};
 
-  protected props = {} as Props;
+  protected props = {} as T;
 
   protected refs: Record<string, Element> = {};
 
   protected abstract template: string;
 
-  constructor(props: Props = {} as Props) {
+  constructor(props: T = {} as T) {
     this.props = props;
   }
 
@@ -118,13 +116,13 @@ export default abstract class Block<
     return fragment;
   }
 
-  public setProps(props: Partial<Props>) {
+  public setProps(props: Partial<T>) {
     this.props = {
       ...this.props,
       ...props,
       __children: [],
       __refs: {},
-    } as Props;
+    } as T;
     this.render();
   }
 
