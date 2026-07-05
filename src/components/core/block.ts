@@ -8,7 +8,7 @@ export interface BlockOwnProps {
   __refs?: Record<string, Element>;
 }
 
-type EventListType = Partial<
+export type EventListType = Partial<
   Record<keyof HTMLElementEventMap, (e: Event) => void>
 >;
 

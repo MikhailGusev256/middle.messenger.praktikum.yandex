@@ -7,7 +7,7 @@ export default class RegisterCard extends Block {
   <div class="register-card">
     <h1 class="hl">Регистрация</h1>
     {{{ RegisterForm }}}
-    {{{ Link text="Войти" data-page="login" }}}
+    {{{ Link text="Войти" page="login" }}}
   </div>
   `;
 }

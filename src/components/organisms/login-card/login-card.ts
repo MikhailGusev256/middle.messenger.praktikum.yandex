@@ -7,7 +7,7 @@ export default class LoginCard extends Block {
   <div class="login-card">
     <h1 class="hl">Вход</h1>
     {{{ LoginForm }}}
-    {{{ Link text="Нет аккаунта?" data-page="register" }}}
+    {{{ Link text="Нет аккаунта?" page="register" }}}
     </div>
   `;
 }

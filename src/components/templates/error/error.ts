@@ -7,7 +7,7 @@ export default class Error extends Block {
   <main class="error-page">
     <h1 class="error-page__code">{{errorCode}}</h1>
     <p class="error-page__message">{{errorMessage}}</p>
-    {{{ Link text="Назад к чатам" data-page="chats" }}}
+    {{{ Link text="Назад к чатам" page="chats" }}}
   </main>
   `;
 }

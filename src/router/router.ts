@@ -18,6 +18,10 @@ export default class Router {
     return new Router(rootQuery);
   }
 
+  static instance(): Router {
+    return Router.__instance;
+  }
+
   private constructor(rootQuery: string) {
     const rootElement = document.querySelector(rootQuery);
     if (!rootElement) {
