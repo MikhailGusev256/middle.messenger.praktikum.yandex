@@ -105,10 +105,10 @@ export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
     }
   }
 
-  protected render(): Element {
+  private render(): Element {
     this.unmountComponent();
     const fragment = this.compile();
-    if (this.domElement && fragment) {
+    if (this.domElement) {
       this.domElement.replaceWith(fragment);
     }
     this.domElement = fragment;
@@ -133,5 +133,11 @@ export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
       this.componentWillUnmount();
       this.removeListeners();
     }
+  }
+
+  public destroy() {
+    this.unmountComponent();
+    this.domElement?.remove();
+    this.domElement = null;
   }
 }

@@ -3,20 +3,23 @@ import './components/helpers';
 import './components/molecules';
 import './components/organisms';
 import {
-  ContextMap,
-  TemplateMap,
-  type TemplateName,
+  // ContextMap,
+  type TemplateNames,
+  templateNames,
 } from './components/templates';
 
+import Router from './router/router';
+
 export default class App {
-  private state: {
-    currentPage: TemplateName;
-  };
+  static initialPage: TemplateNames = 'login';
+  // private state: {
+  // };
+  private router: Router = Router.initialize('#app');
 
   constructor() {
-    this.state = {
-      currentPage: 'profile',
-    };
+    // this.state = {
+    //   currentPage: 'login',
+    // };
   }
 
   addLinkEventListeners() {
@@ -25,27 +28,22 @@ export default class App {
       link.addEventListener('click', () => {
         const page = link.dataset.page;
         if (this.isTemplateName(page)) {
-          this.state.currentPage = page;
-          this.render();
+          this.router.go(page);
         }
       });
     });
   }
 
-  isTemplateName(value: string | undefined): value is TemplateName {
-    return value != undefined && value in TemplateMap;
+  isTemplateName(value: string | undefined): value is TemplateNames {
+    return (
+      value != undefined && (templateNames as readonly string[]).includes(value)
+    );
   }
-  render() {
-    const app = document.getElementById('app');
-    if (!app) return;
 
-    app.textContent = '';
-
-    const templateBlock = TemplateMap[this.state.currentPage];
-    const context = ContextMap[this.state.currentPage];
-    app.appendChild(templateBlock.element());
-    templateBlock.setProps(context);
-
+  start() {
+    // const context = ContextMap[this.state.currentPage];
+    this.router.start();
+    this.router.go(App.initialPage);
     this.addLinkEventListeners();
   }
 }

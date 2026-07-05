@@ -3,5 +3,5 @@
 import App from './app.ts';
 
 document.addEventListener('DOMContentLoaded', () => {
-  new App().render();
+  new App().start();
 });
