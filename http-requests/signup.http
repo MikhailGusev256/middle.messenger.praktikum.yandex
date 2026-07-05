@@ -1,0 +1,11 @@
+POST {{api-url}}/auth/signup
+Content-Type: application/json
+
+{
+  "first_name": "John",
+  "second_name": "Doe",
+  "login": "john-doe2dq21222",
+  "email": "john-doe@yandex.ru",
+  "password": "veryStrongPASS",
+  "phone": "79851943132"
+}
