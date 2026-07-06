@@ -7,6 +7,7 @@ export interface ButtonProps extends BlockOwnProps {
   onClick?: () => void;
   isLinkView: boolean;
   isDangerAction: boolean;
+  type: 'submit' | 'reset' | 'button';
 }
 
 export default class Button extends Block<ButtonProps> {
