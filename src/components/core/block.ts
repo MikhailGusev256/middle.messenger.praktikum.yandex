@@ -28,7 +28,7 @@ export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
 
   protected refs: Record<string, Element> = {};
 
-  protected abstract template: string;
+  protected template: string = '';
 
   constructor(props: T = {} as T) {
     this.props = props;
