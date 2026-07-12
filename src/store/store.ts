@@ -1,6 +1,6 @@
+import type { Indexed } from '../utils/indexed.ts';
 import merge from '../utils/merge.ts';
 import set from '../utils/set.ts';
-import type { Indexed } from './indexed.ts';
 import type { Listener } from './listener.ts';
 
 class Store {
