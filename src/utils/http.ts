@@ -1,3 +1,5 @@
+import { apiUrl } from '../api/constants.ts';
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -26,7 +28,7 @@ function queryStringify(data: Record<string, string | number | boolean>) {
   }, '?');
 }
 
-interface RequestOptions {
+export interface RequestOptions {
   data?: FormData | Record<string, unknown>;
   queryParameters?: Record<string, string | number | boolean>;
   responseType?: XMLHttpRequestResponseType;
@@ -41,10 +43,13 @@ class HTTPTransport {
   private readonly _baseUrl: string;
 
   constructor(baseUrl: string) {
-    this._baseUrl = baseUrl;
+    this._baseUrl = apiUrl + baseUrl;
   }
 
-  get = (shortUrl: string, options: RequestOptions = {}) => {
+  get = <TResponse = unknown>(
+    shortUrl: string,
+    options: RequestOptions = {},
+  ): Promise<TResponse> => {
     return this.request(
       shortUrl,
       { ...options, method: METHODS.GET },
@@ -52,7 +57,10 @@ class HTTPTransport {
     );
   };
 
-  post = (shortUrl: string, options: RequestOptions = {}) => {
+  post = <TResponse = unknown>(
+    shortUrl: string,
+    options: RequestOptions = {},
+  ): Promise<TResponse> => {
     return this.request(
       shortUrl,
       { ...options, method: METHODS.POST },
@@ -60,7 +68,10 @@ class HTTPTransport {
     );
   };
 
-  put = (shortUrl: string, options: RequestOptions = {}) => {
+  put = <TResponse = unknown>(
+    shortUrl: string,
+    options: RequestOptions = {},
+  ): Promise<TResponse> => {
     return this.request(
       shortUrl,
       { ...options, method: METHODS.PUT },
@@ -68,7 +79,10 @@ class HTTPTransport {
     );
   };
 
-  delete = (shortUrl: string, options: RequestOptions = {}) => {
+  delete = <TResponse = unknown>(
+    shortUrl: string,
+    options: RequestOptions = {},
+  ): Promise<TResponse> => {
     return this.request(
       shortUrl,
       { ...options, method: METHODS.DELETE },
@@ -76,11 +90,11 @@ class HTTPTransport {
     );
   };
 
-  request = (
+  request = <TResponse = unknown>(
     shortUrl: string,
     options: RequestOptionsWithMethod,
     timeout = 5000,
-  ) => {
+  ): Promise<TResponse> => {
     const url = this._baseUrl + shortUrl;
     const {
       headers = {},
@@ -97,6 +111,7 @@ class HTTPTransport {
       }
 
       const xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
       const isGet = method === METHODS.GET;
 
       xhr.open(

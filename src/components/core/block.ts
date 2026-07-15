@@ -12,8 +12,8 @@ export type EventListType = Partial<
   Record<keyof HTMLElementEventMap, (e: Event) => void>
 >;
 
-export interface ComponentClass {
-  new (props?: object): Block;
+export interface ComponentClass<T extends BlockOwnProps = BlockOwnProps> {
+  new (props?: T): Block<T>;
   componentName: string;
 }
 

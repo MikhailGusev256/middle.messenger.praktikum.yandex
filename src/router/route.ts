@@ -6,9 +6,16 @@ export default class Route {
   private readonly _blockClass: new () => Block;
   private readonly _props: BlockOwnProps;
   private readonly path: string;
+  public readonly isPublic: boolean;
 
-  constructor(path: string, view: new () => Block, props: BlockOwnProps) {
+  constructor(
+    path: string,
+    isPublic: boolean,
+    view: new () => Block,
+    props: BlockOwnProps,
+  ) {
     this.path = path;
+    this.isPublic = isPublic;
     this._blockClass = view;
     this._block = null;
     this._props = props;
@@ -21,8 +28,8 @@ export default class Route {
     }
   }
 
-  match(name: string) {
-    return name === this.path;
+  match(path: string) {
+    return path === this.path;
   }
 
   render(rootElement: Element) {

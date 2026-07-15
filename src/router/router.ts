@@ -1,5 +1,6 @@
 import type Block from '../components/core/block.ts';
 import type { TemplateNames } from '../components/templates';
+import store from '../store/store.ts';
 import Route from './route.ts';
 import { pathByName, routeConfigs } from './routeConfig.ts';
 
@@ -30,14 +31,14 @@ export default class Router {
     Router.__instance = this;
 
     for (const config of routeConfigs) {
-      this.use(config.path, config.view);
+      this.use(config.path, config.public, config.view);
     }
 
     this._rootElement = rootElement;
   }
 
-  use(path: string, block: new () => Block) {
-    const route = new Route(path, block, {});
+  use(path: string, isPublic: boolean, block: new () => Block) {
+    const route = new Route(path, isPublic, block, {});
     this.routes.push(route);
     return this;
   }
@@ -53,6 +54,19 @@ export default class Router {
   private onRoute(path: string): void {
     const route = this.routes.find((route) => route.match(path));
     if (!route) {
+      this.go('error404', true);
+      return;
+    }
+
+    const user = store.getState()['user'];
+
+    if (route.isPublic && user != null) {
+      this.go('chats', true);
+      return;
+    }
+
+    if (!route.isPublic && user == null) {
+      this.go('login', true);
       return;
     }
 
@@ -64,12 +78,17 @@ export default class Router {
     route.render(this._rootElement);
   }
 
-  public go(pathname: TemplateNames) {
+  public go(pathname: TemplateNames, replaceState?: boolean) {
     const path = pathByName.get(pathname);
     if (!path) {
+      console.log('Не удалось найти путь для шаблона');
       return;
     }
-    this.history.pushState({}, '', path);
+    if (replaceState) {
+      this.history.replaceState({}, '', path);
+    } else {
+      this.history.pushState({}, '', path);
+    }
     this.onRoute(path);
   }
 
