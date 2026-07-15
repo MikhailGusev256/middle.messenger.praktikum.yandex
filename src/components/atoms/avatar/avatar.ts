@@ -1,6 +1,11 @@
-import Block from '../../core/block.ts';
+import Block, { type BlockOwnProps } from '../../core/block.ts';
 
-export default class Avatar extends Block {
+export interface AvatarProps extends BlockOwnProps {
+  src: string;
+  name: string;
+}
+
+export default class Avatar extends Block<AvatarProps> {
   static componentName = 'Avatar';
 
   protected template = `

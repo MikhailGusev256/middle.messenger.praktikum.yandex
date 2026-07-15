@@ -32,8 +32,10 @@ class UserAPI extends BaseAPI {
     });
   }
 
-  updateAvatar(request: FormData) {
-    return this.put('/profile/avatar', { data: request });
+  updateAvatar<UpdateProfileResponse>(request: FormData) {
+    return this.put<UpdateProfileResponse>('/profile/avatar', {
+      data: request,
+    });
   }
 
   updatePassword(request: UpdatePasswordRequest) {

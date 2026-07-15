@@ -31,7 +31,7 @@ export default class Profile extends Block<ProfileProps> {
 
           {{#ifEquals targetMode "view"}}
             <div class="profile__header">
-                {{{ Avatar src=user.avatar name=user.display_name}}}
+                {{{ EditableAvatar src=user.avatar name=user.display_name}}}
                 <h1 class="hl">{{user.display_name}}</h1>
             </div>
             <div class="profile__link-wrapper">

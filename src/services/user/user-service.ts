@@ -50,6 +50,14 @@ class UserService {
       display_name: displayName,
       phone,
     });
+    await this.fetchUser();
+  }
+
+  public async updateAvatar(file: File) {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    await userApi.updateAvatar(formData);
+    await this.fetchUser();
   }
 }
 

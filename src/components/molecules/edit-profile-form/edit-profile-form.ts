@@ -6,7 +6,6 @@ export default class EditProfileForm extends Form {
 
   protected template = `
     <form class="edit-profile-form">
-<!--        <input type="file" name="avatar" aria-label="Аватар" accept="image/*">-->
         {{{ Input
             id="email"
             name="email"

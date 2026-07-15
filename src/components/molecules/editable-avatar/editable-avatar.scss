@@ -1,0 +1,26 @@
+.editable-avatar {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.editable-avatar__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.editable-avatar:has(.editable-avatar__input:focus-visible) {
+  border-radius: 100%;
+  outline: 0.2rem solid var(--color-accent);
+  outline-offset: 0.2rem;
+}
+
+.editable-avatar__error {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
