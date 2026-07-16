@@ -1,16 +1,41 @@
-import HTTPTransport from '../utils/http.ts';
 import { BaseAPI } from './base-api';
 
-const chatAPIInstance = new HTTPTransport('chats');
+export type GetChatsRequest = {
+  offset?: number;
+  limit?: number;
+  title?: string;
+};
 
-export class ChatAPI extends BaseAPI {
-  create() {
-    // Здесь уже не нужно писать полный путь /api/v1/chats/
-    return chatAPIInstance.post('/', { data: { title: 'string' } });
-  }
+export type GetChatsResponseItem = {
+  id: number;
+  title: string;
+  avatar: string | null;
+  unread_count: number;
+  created_by: number;
+  last_message: MessageResponse | null;
+};
 
-  request() {
-    // Здесь уже не нужно писать полный путь /api/v1/chats/
-    return chatAPIInstance.get('/full');
+export type MessageResponse = {
+  user: LastMessageUser;
+  time: string;
+  content: string;
+};
+
+export type LastMessageUser = {
+  first_name: string;
+  second_name: string;
+  avatar: string | null;
+  email: string;
+  login: string;
+  phone: string;
+};
+
+class ChatAPI extends BaseAPI {
+  public getChats(request: GetChatsRequest = {}) {
+    return this.get<GetChatsResponseItem[]>('/', {
+      queryParameters: request,
+    });
   }
 }
+
+export default new ChatAPI('chats');

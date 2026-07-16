@@ -7,7 +7,9 @@ const METHODS = {
   DELETE: 'DELETE',
 } as const;
 
-function queryStringify(data: Record<string, string | number | boolean>) {
+function queryStringify(
+  data: Record<string, string | number | boolean | undefined>,
+) {
   const keys = Object.keys(data);
 
   if (keys.length === 0) {
@@ -15,12 +17,14 @@ function queryStringify(data: Record<string, string | number | boolean>) {
   }
 
   return keys.reduce((result, key, index) => {
-    if (data[key] === undefined || data[key] === null) {
+    const value = data[key];
+
+    if (value === undefined || value === null) {
       return result;
     }
 
     const encodedKey = encodeURIComponent(key);
-    const encodedValue = encodeURIComponent(data[key]);
+    const encodedValue = encodeURIComponent(value);
 
     const separator = index < keys.length - 1 ? '&' : '';
 
@@ -30,7 +34,7 @@ function queryStringify(data: Record<string, string | number | boolean>) {
 
 export interface RequestOptions {
   data?: FormData | Record<string, unknown>;
-  queryParameters?: Record<string, string | number | boolean>;
+  queryParameters?: Record<string, string | number | boolean | undefined>;
   responseType?: XMLHttpRequestResponseType;
   timeout?: number;
   headers?: Record<string, string>;

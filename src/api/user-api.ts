@@ -26,13 +26,13 @@ export type UpdatePasswordRequest = {
 };
 
 class UserAPI extends BaseAPI {
-  updateProfile<UpdateProfileResponse>(request: UpdateProfileRequest) {
+  updateProfile(request: UpdateProfileRequest) {
     return this.put<UpdateProfileResponse>('/profile', {
       data: request,
     });
   }
 
-  updateAvatar<UpdateProfileResponse>(request: FormData) {
+  updateAvatar(request: FormData) {
     return this.put<UpdateProfileResponse>('/profile/avatar', {
       data: request,
     });

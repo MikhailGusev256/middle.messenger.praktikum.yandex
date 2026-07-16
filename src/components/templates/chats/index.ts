@@ -1,7 +1,7 @@
-﻿import { registerComponent } from '../../core/registerComponent.ts';
+﻿import { connect } from '../../core/connect.ts';
 import './chats.scss';
 import Chats from './chats.ts';
 
-registerComponent(Chats);
-
-export default Chats;
+export default connect(Chats, (state) => ({
+  user: state['user'] as User,
+}));
