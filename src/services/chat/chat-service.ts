@@ -8,6 +8,21 @@ class ChatService {
     const chatPreviews = response.map((c) => toChatPreview(c));
     store.setState('chats', chatPreviews);
   }
+
+  public async createChat(title: string): Promise<void> {
+    await chatApi.createChat({ title: title });
+    await this.fetchChats();
+  }
+
+  public async addUsers(users: number[], chatId: number): Promise<void> {
+    await chatApi.addUsers({ users, chatId });
+    await this.fetchChats();
+  }
+
+  public async removeUsers(users: number[], chatId: number): Promise<void> {
+    await chatApi.removeUsers({ users, chatId });
+    await this.fetchChats();
+  }
 }
 
 export default new ChatService();

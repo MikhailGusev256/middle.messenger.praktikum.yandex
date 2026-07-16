@@ -8,6 +8,7 @@ export default class ChatPreviewList extends Block {
     <header class="chat-preview-list__header">
         {{{ Link text="Профиль >" page="profile" }}}
         <input aria-label="Поиск" id="search-chat" class="chat-preview-list__search" type="search" name="search" placeholder="Поиск" autocomplete="off"/>
+        {{{ Button text="Создать" }}}
     </header>
     <ul class="chat-preview-list__content" role="list">
         {{#each chats}}

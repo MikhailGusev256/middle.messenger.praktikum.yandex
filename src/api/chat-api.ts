@@ -30,11 +30,36 @@ export type LastMessageUser = {
   phone: string;
 };
 
+export type CreateChatRequest = {
+  title: string;
+};
+
+export type CreateChatResponse = {
+  id: number;
+};
+
+export type ChangeUsersRequest = {
+  users: number[];
+  chatId: number;
+};
+
 class ChatAPI extends BaseAPI {
   public getChats(request: GetChatsRequest = {}) {
     return this.get<GetChatsResponseItem[]>('/', {
       queryParameters: request,
     });
+  }
+
+  public createChat(request: CreateChatRequest) {
+    return this.post<CreateChatResponse>('/', { data: request });
+  }
+
+  public addUsers(request: ChangeUsersRequest) {
+    return this.put('/users', { data: request });
+  }
+
+  public removeUsers(request: ChangeUsersRequest) {
+    return this.delete('/users', { data: request });
   }
 }
 
