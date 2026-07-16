@@ -1,14 +1,22 @@
-import Block from '../../core/block.ts';
+import type { ChatMessage } from '../../../services/chat/chat-message.ts';
+import type { ChatPreviewData } from '../../../services/chat/chat-preview-data.ts';
+import chatService from '../../../services/chat/chat-service.ts';
+import Block, { type BlockOwnProps } from '../../core/block.ts';
 
-export default class Chats extends Block {
+interface ChatsProps extends BlockOwnProps {
+  chats: ChatPreviewData[];
+  chatMessages: ChatMessage[];
+}
+
+export default class Chats extends Block<ChatsProps> {
   static componentName = 'Chats';
 
   protected template = `
   <div class="chats-page">
-    {{{ ChatPreviewList chats=chatData.chats }}}
+    {{{ ChatPreviewList chats=chats }}}
     <main class="chats-page__window">
         <div class="chats-page__history">
-        {{#each chatData.chatMessages}}
+        {{#each chatMessages}}
             {{{ MessageBubble text=text out=out time=time}}}
         {{/each}}
         </div>
@@ -16,4 +24,8 @@ export default class Chats extends Block {
     </main>
   </div>
   `;
+
+  override async componentDidMount() {
+    await chatService.fetchChats();
+  }
 }
