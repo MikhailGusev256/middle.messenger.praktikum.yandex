@@ -1,6 +1,3 @@
-﻿import { registerComponent } from '../../core/registerComponent.ts';
-import Register from './register.ts';
-
-registerComponent(Register);
+﻿import Register from './register.ts';
 
 export default Register;

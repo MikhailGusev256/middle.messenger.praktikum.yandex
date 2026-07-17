@@ -16,10 +16,7 @@ class ChatService {
   }
 
   public async selectChat(id: number) {
-    const chatUserResponseItems = await chatApi.getChatUsers(id, {});
-    const chatUsers = chatUserResponseItems.map((u) => toChatUser(u));
-    store.setState('selectedChatUsers', chatUsers);
-    store.setState('selectedChatId', id);
+    await this.refreshChatUsers(id);
   }
 
   public async addUsers(users: number[], chatId: number): Promise<void> {
@@ -29,7 +26,14 @@ class ChatService {
 
   public async removeUsers(users: number[], chatId: number): Promise<void> {
     await chatApi.removeUsers({ users, chatId });
-    await this.fetchChats();
+    await this.refreshChatUsers(chatId);
+  }
+
+  private async refreshChatUsers(id: number) {
+    const chatUserResponseItems = await chatApi.getChatUsers(id, {});
+    const chatUsers = chatUserResponseItems.map((u) => toChatUser(u));
+    store.setState('selectedChatUsers', chatUsers);
+    store.setState('selectedChatId', id);
   }
 }
 

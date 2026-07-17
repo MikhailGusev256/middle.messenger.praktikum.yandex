@@ -14,7 +14,7 @@ export default class EditableAvatar extends Block<EditableAvatarProps> {
   <label class="editable-avatar">
     <input class="editable-avatar__input" type="file" name="avatar" aria-label="Аватар" accept="image/jpeg, image/png, image/gif, image/webp">
     {{{ Avatar src=src name=name }}}
-    <span class="editable-avatar__error">{{{ FormError error=error }}}</span>
+    <span class="editable-avatar__error">{{{ Error error=error }}}</span>
   </label>
   `;
 

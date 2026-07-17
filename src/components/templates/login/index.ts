@@ -1,6 +1,3 @@
-﻿import { registerComponent } from '../../core/registerComponent.ts';
-import Login from './login.ts';
-
-registerComponent(Login);
+﻿import Login from './login.ts';
 
 export default Login;

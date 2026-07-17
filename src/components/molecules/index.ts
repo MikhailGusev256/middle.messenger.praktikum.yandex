@@ -10,4 +10,4 @@ import './login-form';
 import './message-bubble';
 import './message-input';
 import './register-form';
-import './remove-user-form';
+import './remove-user-list';

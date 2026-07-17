@@ -39,11 +39,11 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
     {{/if}}
 
     {{#ifEquals formMode "add"}}
-    {{{ AddUserForm chatId=id onDone=closeForm}}}
+        {{{ AddUserForm chatId=id onDone=closeForm}}}
     {{/ifEquals}}
 
     {{#ifEquals formMode "remove"}}
-    {{{ RemoveUserForm chatId=id onDone=closeForm}}}
+        {{{ RemoveUserForm chatId=id onDone=closeForm}}}
     {{/ifEquals}}
   </div>
   `;

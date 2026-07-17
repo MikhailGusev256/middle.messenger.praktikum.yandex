@@ -61,7 +61,7 @@ export default class RegisterForm extends Form {
                 aria-label="Пароль (ещё раз)"
                 validationRule="password"
                 autocomplete="false" }}}
-            {{{ FormError error="error" }}}
+            {{{ Error error="error" }}}
         </div>
         {{{ Button text="Зарегистрироваться" type="submit"}}}
     </form>

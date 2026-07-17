@@ -4,11 +4,11 @@ interface FormErrorProps extends BlockOwnProps {
   error: string;
 }
 
-export default class FormError extends Block<FormErrorProps> {
-  static componentName = 'FormError';
+export default class Error extends Block<FormErrorProps> {
+  static componentName = 'Error';
 
   protected template = `
-    <span class="form-error-text{{#if error}} form-error-text--visible{{/if}}">
+    <span class="error-text{{#if error}} error-text--visible{{/if}}">
         {{error}}
     </span>
   `;

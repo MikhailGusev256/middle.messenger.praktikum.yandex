@@ -10,7 +10,7 @@ export default class CreateChatForm extends Form {
               label="Название нового чата"
               aria-label="Название нового чата"}}}
     {{{ Button text="Создать" type="submit" }}}
-    {{{ FormError error=error }}}
+    {{{ Error error=error }}}
   </form>
   `;
 

@@ -20,7 +20,7 @@ export default class AddUserForm extends Form<AddUserFormProps> {
             validationRule="login"
             autocomplete="off" }}}
 
-        {{{ FormError error=error }}}
+        {{{ Error error=error }}}
 
         {{{ Button text="Добавить" type="submit" }}}
     </form>

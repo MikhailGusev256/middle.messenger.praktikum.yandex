@@ -50,7 +50,7 @@ export default class EditProfileForm extends Form {
             label="Телефон"
             validationRule="phone" }}}
 
-        {{{ FormError error=error }}}
+        {{{ Error error=error }}}
 
         {{{ Button text="Сохранить" type="submit" }}}
     </form>

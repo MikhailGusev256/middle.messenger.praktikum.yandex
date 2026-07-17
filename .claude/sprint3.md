@@ -80,52 +80,9 @@
 
 ---
 
-# План выполнения (закрывать сверху вниз)
 
-Уже готово: `Router` (history/popstate/back/forward), монтирование одной страницы (`Route` + `Block.destroy()`), навигация `Link`/`GoBackPanel`, все страницы + формы + валидация, полный `HTTPTransport` (XHR+Promise, query для GET / body для остальных).
-
-## Фаза 0 — Фундамент (баги, которые упадут при первом же обращении к стору)
-- [x] **T0.1** `src/store/store.ts` — добавить импорты `merge` и `set` (используются, но не импортированы).
-- [x] **T0.2** `src/components/core/connect.ts` — импортировать `isEqual` (именованный из `utils/isEqual.ts`).
-- [x] **T0.3** `src/utils/queryString.ts` — убрать верхнеуровневый демо-вызов `queryStringify(obj)` (побочный эффект при импорте).
-- [x] **T0.4** `src/app.ts` — убрать `router.go(initialPage)` после `router.start()`; именно он ломает F5 (перезагрузка всегда кидает на `/settings`). Пусть `start()` рендерит `window.location.pathname`.
-
-## Фаза 1 — HTTP + база API под реальный сервер
-- [x] **T1.1** `src/utils/http.ts` — `xhr.withCredentials = true` (сессия по кукам; без этого authed-запросы 401). Вынести базовый URL `https://ya-praktikum.tech/api/v2` в константу.
-- [x] **T1.2** Исправить `chat-api.ts` / `user-api.ts`: у каждого свой `HTTPTransport` на правильный ресурс (сейчас оба на `api/v1/chats`).
-
-## Фаза 2 — Авторизация (регистрация / вход / выход + редирект)
-Эндпоинты: `POST /auth/signup`, `POST /auth/signin`, `POST /auth/logout`, `GET /auth/user`.
-- [x] **T2.1** `src/api/auth-api.ts` (новый) — `signup`, `signin`, `logout`, `me`.
-- [x] **T2.2** `user-service.ts` — `login`, `register`, `logout`, `fetchUser`; при успехе писать в стор + `go('chats')`, при выходе — очистить + `go('login')`.
-- [x] **T2.3** Формы `LoginForm` / `RegisterForm` — переопределить `onValidSubmit` на вызов сервиса; добавить проверку `password === password_repeat`; ошибки API показывать в форме.
-- [x] **T2.4** Кнопку «Выйти» в `profile.ts` повесить на `userService.logout()`.
-
-## Фаза 3 — Auth-guard в роутере (middleware)
-- [x] **T3.1** `onRoute` — правила доступа: без авторизации только `/` и `/sign-up` (иначе → `/`); авторизованный на `/` или `/sign-up` → `/messenger`.
-- [x] **T3.2** `onRoute` — неизвестный путь → `/404` (сейчас молча `return`). Проверить SPA-fallback dev-сервера для F5 на глубоких ссылках.
-
-## Фаза 4 — Профиль (данные, аватар, пароль)
-Эндпоинты: `PUT /user/profile`, `PUT /user/profile/avatar` (FormData), `PUT /user/password`.
-- [x] **T4.1** Расширить модель `User` (`services/user/user.ts`) до реальных полей.
-- [x] **T4.2** `user-api.ts` — `updateProfile`, `updateAvatar` (FormData), `updatePassword`.
-- [x] **T4.3** Профиль через `connect` (убрать хардкод «Иван»); аватар = `.../api/v2/resources` + `avatar`.
-- [x] **T4.4** Подключить `EditProfileForm`, `EditPasswordForm`, file-input аватара к сервису; обновлять стор при успехе.
-
-## Фаза 5 — Чаты (список, создание, добавить/удалить участника)
-Эндпоинты: `GET /chats`, `POST /chats`, `PUT /chats/users`, `DELETE /chats/users`.
-- [ ] **T5.1** `chat-api.ts` — `getChats`, `createChat`, `addUsers`, `removeUsers`.
-- [ ] **T5.2** `chat-service.ts` — реальный `GET /chats` в стор; `createChat`, `addUsers`, `removeUsers`.
-- [ ] **T5.3** UI: контрол «создать чат» в `ChatPreviewList` и добавить/удалить участника в открытом чате (переиспользовать `Input`/`Button`/`Form`). Участник задаётся **числовым id** — `PUT/DELETE /chats/users` принимают `users: number[]`. Поиск по логину (`POST /user/search`) в требованиях спринта нет, не делаем.
-- [x] **T5.4** Список чатов через `connect` — сделано и проверено: сервис пишет `setState('chats')`, `templates/chats/index.ts` мапит слайс, список приезжает с сервера.
-
-## Фаза 6 — Документация и проверка
-- [ ] **T6.1** Обновить `README.md` (функциональность + инструменты).
-- [x] **T6.2** Обновить `CLAUDE.md` (сделано ассистентом: роутинг, стор/connect, HTTP/API, сервисы, формы, команды).
-- [ ] **T6.3** `npm run build` без ошибок, `npm run lint` чисто, ветка `sprint_3`.
-
-## Фаза 7 — Cross-site cookies (чтобы логин работал без ручных настроек браузера)
+## Возможно понадобится доделать, чтобы логин работал без ручных настроек браузера — Cross-site cookies
 Проблема: фронт и API на разных доменах → кука `authCookie` третья-сторонняя. Chrome по умолчанию её режет: `signin` возвращает 200, но кука не сохраняется, и `GET /auth/user` падает `401 Cookie is not valid`. «Разрешить third-party cookies» в Chrome — костыль только на своей машине; у проверяющего/в CI логин снова упадёт. Решение — сделать запросы same-origin через прокси (нужны обе среды, они делают одно и то же):
-- [ ] **T7.1** `vite.config` — `server.proxy`: проксировать `/api/v2` → `https://ya-praktikum.tech/api/v2` для `npm run dev` (dev-сервер, в билд не попадает).
-- [ ] **T7.2** `netlify.toml` — redirect-rewrite (статус `200`, не `301`): `/api/v2/*` → `https://ya-praktikum.tech/api/v2/:splat` для задеплоенного сайта.
-- [ ] **T7.3** `apiUrl` в `src/api/constants.ts` сделать относительным (`/api/v2`) вместо полного URL — один и тот же код для dev и прода.
+- [ ] `vite.config` — `server.proxy`: проксировать `/api/v2` → `https://ya-praktikum.tech/api/v2` для `npm run dev` (dev-сервер, в билд не попадает).
+- [ ] `netlify.toml` — redirect-rewrite (статус `200`, не `301`): `/api/v2/*` → `https://ya-praktikum.tech/api/v2/:splat` для задеплоенного сайта.
+- [ ] `apiUrl` в `src/api/constants.ts` сделать относительным (`/api/v2`) вместо полного URL — один и тот же код для dev и прода.

@@ -29,13 +29,13 @@ export default class ChatPreviewList extends Block {
   `;
 
   protected events: EventListType = {
-    click: (e) => {
+    click: async (e) => {
       const button = (e.target as HTMLElement).closest('[data-id]');
       if (!button) {
         return;
       }
       const id = Number((button as HTMLElement).dataset.id as string);
-      chatService.selectChat(id);
+      await chatService.selectChat(id);
     },
   };
 }

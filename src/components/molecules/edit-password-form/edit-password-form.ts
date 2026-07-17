@@ -33,7 +33,7 @@ export default class EditPasswordForm extends Form {
             validationRule="password"
             autocomplete="false" }}}
 
-        {{{ FormError error=error }}}
+        {{{ Error error=error }}}
 
         {{{ Button text="Сохранить" type="submit" }}}
     </form>

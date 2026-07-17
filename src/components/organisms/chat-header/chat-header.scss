@@ -7,10 +7,10 @@
 
   &__name {
     flex: 1;
-    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: var(--font-size-m);
   }
 
   &__menu-button {
@@ -21,7 +21,7 @@
     border: none;
     border-radius: 50%;
     background: transparent;
-    font-size: var(--font-size-l);
+    font-size: var(--font-size-m);
     line-height: 1;
     cursor: pointer;
 
