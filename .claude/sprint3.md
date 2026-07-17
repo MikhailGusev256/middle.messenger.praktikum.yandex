@@ -84,7 +84,7 @@
 ## Возможно понадобится доделать, чтобы логин работал без ручных настроек браузера — Cross-site cookies
 Проблема: фронт и API на разных доменах → кука `authCookie` третья-сторонняя. Chrome по умолчанию её режет: `signin` возвращает 200, но кука не сохраняется, и `GET /auth/user` падает `401 Cookie is not valid`. «Разрешить third-party cookies» в Chrome — костыль только на своей машине; у проверяющего/в CI логин снова упадёт. Решение — сделать запросы same-origin через прокси (нужны обе среды, они делают одно и то же):
 - [x] `vite.config` — `server.proxy` (+ `preview.proxy` и `cookieDomainRewrite: ''` — API ставит куку с `Domain=ya-praktikum.tech`, без переписывания браузер на localhost её отбрасывает).
-- [x] `netlify.toml` — rewrite `/api/v2/*` → API со статусом 200 + SPA-fallback `/*` → `/index.html` (иначе F5 на `/messenger` отдаёт 404 Netlify). **Проверить логин на задеплоенном сайте после пуша.**
+- [x] Netlify: rewrite через `[[redirects]]` НЕ работает — он передаёт `Set-Cookie: ...Domain=ya-praktikum.tech` как есть, браузер на `*.netlify.app` куку отбрасывает («Cookie is not valid» после логина). Решение — edge-функция `netlify/edge-functions/api-proxy.ts`: проксирует `/api/v2/*` и вырезает `Domain` из `Set-Cookie`. В `netlify.toml` остался только SPA-fallback `/*` → `/index.html` (иначе F5 на `/messenger` отдаёт 404 Netlify). **Проверить логин на задеплоенном сайте после пуша.**
 - [x] `apiUrl` в `src/api/constants.ts` — относительный `/api/v2/` (слэш на конце обязателен: `HTTPTransport` конкатенирует `apiUrl + 'auth'`).
 
 ---
