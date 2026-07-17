@@ -1,0 +1,12 @@
+# Прокси к API: делает запросы same-origin, чтобы authCookie не была third-party
+[[redirects]]
+  from = "/api/v2/*"
+  to = "https://ya-praktikum.tech/api/v2/:splat"
+  status = 200
+  force = true
+
+# SPA-fallback: прямые ссылки и F5 на /messenger, /settings и т.д. отдают index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
