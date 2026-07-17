@@ -1,4 +1,4 @@
 import './error.scss';
-import Error from './error.ts';
+import { Error404, Error500 } from './error.ts';
 
-export default Error;
+export default { Error404, Error500 };

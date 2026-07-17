@@ -81,8 +81,7 @@ export default class Router {
   public go(pathname: TemplateNames, replaceState?: boolean) {
     const path = pathByName.get(pathname);
     if (!path) {
-      console.log('Не удалось найти путь для шаблона');
-      return;
+      throw new Error('Не удалось найти путь для шаблона');
     }
     if (replaceState) {
       this.history.replaceState({}, '', path);

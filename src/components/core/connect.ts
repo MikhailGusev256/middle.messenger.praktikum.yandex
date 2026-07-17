@@ -9,13 +9,14 @@ export function connect<TProps extends BlockOwnProps>(
 ) {
   // используем class expression
   return class extends Component {
+    private unsubscribe: () => void;
     constructor(props: TProps = {} as TProps) {
       let state = mapStateToProps(store.getState());
 
       super({ ...props, ...state });
 
       // подписываемся на событие
-      store.subscribe(() => {
+      this.unsubscribe = store.subscribe(() => {
         const newState = mapStateToProps(store.getState());
         if (!isEqual(state, newState)) {
           // вызываем обновление компонента, передав данные из хранилища
@@ -23,6 +24,11 @@ export function connect<TProps extends BlockOwnProps>(
           this.setProps({ ...mapStateToProps(store.getState()) });
         }
       });
+    }
+
+    override destroy() {
+      this.unsubscribe();
+      super.destroy();
     }
   };
 }

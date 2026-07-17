@@ -72,5 +72,6 @@ export default class EditProfileForm extends Form {
       displayName,
       phone,
     );
+    this.props.onDone?.();
   }
 }

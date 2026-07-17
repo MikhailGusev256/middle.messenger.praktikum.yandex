@@ -18,15 +18,14 @@ class UserService {
   }
 
   public async register(request: SignUpRequest) {
-    const response = await authApi.register(request);
-    console.log(response);
+    await authApi.register(request);
     await this.fetchUser();
     router.instance().go('chats');
   }
 
   public async logout() {
     await authApi.logout();
-    store.setState('user', null);
+    store.reset();
     router.instance().go('login');
   }
 

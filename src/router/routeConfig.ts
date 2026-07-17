@@ -32,13 +32,13 @@ export const routeConfigs = [
   {
     name: 'error404',
     path: '/404',
-    view: errorTmpl,
+    view: errorTmpl.Error404,
     public: false,
   },
   {
     name: 'error500',
     path: '/500',
-    view: errorTmpl,
+    view: errorTmpl.Error500,
     public: false,
   },
 ] as const;

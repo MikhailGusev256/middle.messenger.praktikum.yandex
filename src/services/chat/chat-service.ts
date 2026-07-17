@@ -21,7 +21,7 @@ class ChatService {
 
   public async addUsers(users: number[], chatId: number): Promise<void> {
     await chatApi.addUsers({ users, chatId });
-    await this.fetchChats();
+    await this.refreshChatUsers(chatId);
   }
 
   public async removeUsers(users: number[], chatId: number): Promise<void> {

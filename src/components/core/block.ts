@@ -18,6 +18,8 @@ export interface ComponentClass<T extends BlockOwnProps = BlockOwnProps> {
 }
 
 export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
+  private hasMounted = false;
+
   protected children: Block<object>[] = [];
 
   private domElement: Element | null = null;
@@ -91,6 +93,11 @@ export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
 
   private mountComponent() {
     this.attachListeners();
+    // Чтобы не было повторных обращений к API при ререндере компонента
+    if (this.hasMounted) {
+      return;
+    }
+    this.hasMounted = true;
     this.componentDidMount();
   }
 

@@ -50,5 +50,6 @@ export default class EditPasswordForm extends Form {
     const oldPassword = data['old_password'].toString();
 
     await userService.updatePassword(oldPassword, newPassword);
+    this.props.onDone?.();
   }
 }

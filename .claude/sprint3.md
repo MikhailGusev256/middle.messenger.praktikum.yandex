@@ -86,3 +86,17 @@
 - [ ] `vite.config` — `server.proxy`: проксировать `/api/v2` → `https://ya-praktikum.tech/api/v2` для `npm run dev` (dev-сервер, в билд не попадает).
 - [ ] `netlify.toml` — redirect-rewrite (статус `200`, не `301`): `/api/v2/*` → `https://ya-praktikum.tech/api/v2/:splat` для задеплоенного сайта.
 - [ ] `apiUrl` в `src/api/constants.ts` сделать относительным (`/api/v2`) вместо полного URL — один и тот же код для dev и прода.
+
+---
+
+## Критичные проблемы по итогам аудита (2026-07-17)
+
+- [ ] **/404 и /500 рендерятся пустыми** — шаблон `error.ts` ждёт `errorCode`/`errorMessage`, но `Router.use()` (`router.ts:41`) создаёт `Route` с props `{}`, а в `routeConfig.ts` props не заданы. Прокинуть props из конфига маршрута в `Route`.
+- [ ] **LoginForm не показывает ошибки API** — в шаблоне `login-form.ts` нет `{{{ Error error=error }}}`, поэтому «неверный пароль» пользователь не видит.
+- [ ] **RegisterForm: опечатка `{{{ Error error="error" }}}`** (`register-form.ts:64`) — передан литерал `"error"`, на странице всегда виден текст «error». Должно быть `error=error`.
+- [ ] **EditProfileForm / EditPasswordForm не вызывают `this.props.onDone?.()` после успеха** — после сохранения пользователь остаётся в режиме редактирования (Profile передаёт `onDone=changeToViewMode`, но переопределённые `onValidSubmit` его не зовут).
+- [ ] **Утечка подписок в `connect.ts`** — результат `store.subscribe()` (функция отписки) игнорируется; каждый переход между страницами оставляет подписку уничтоженного блока навсегда. Отписываться в `componentWillUnmount`.
+- [ ] **`componentDidMount` срабатывает при каждом рендере** — `block.ts: render()` всегда зовёт `mountComponent()`. Следствие: `Chats.componentDidMount` дёргает `fetchChats()` при каждом `setProps` (например, при каждом выборе чата) — лишние сетевые запросы.
+- [ ] **`logout` не чистит store** (`user-service.ts`) — `chats`, `selectedChatId`, `selectedChatUsers` остаются; следующий пользователь увидит чужие данные.
+- [ ] **`chat-service.addUsers` не обновляет `selectedChatUsers`** — после добавления участника список «удалить пользователя» устаревший (а `removeUsers`, наоборот, не обновляет чаты).
+- [ ] **Отладочные `console.log`** — `user-service.ts:22` (ответ регистрации), `http.ts:151`, `router.ts:84`; рекомендация спринта прямо запрещает console.log-подход.

@@ -19,6 +19,11 @@ class Store {
     this.emit();
   }
 
+  public reset() {
+    this.state = {};
+    this.emit();
+  }
+
   public subscribe(listener: Listener): () => void {
     this.listeners.add(listener);
 

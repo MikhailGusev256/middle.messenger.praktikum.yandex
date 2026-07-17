@@ -25,6 +25,7 @@ export default class LoginForm extends Form {
             autocomplete="true" }}}
     </div>
     {{{ Button text="Авторизоваться" type="submit" }}}
+    {{{ Error error=error }}}
   </form>
   `;
 
