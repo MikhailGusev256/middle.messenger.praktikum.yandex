@@ -5,6 +5,7 @@ import Block, { type BlockOwnProps } from '../../core/block.ts';
 
 interface ChatsProps extends BlockOwnProps {
   chats: ChatPreviewData[];
+  selectedChat?: ChatPreviewData;
   chatMessages: ChatMessage[];
 }
 
@@ -15,12 +16,15 @@ export default class Chats extends Block<ChatsProps> {
   <div class="chats-page">
     {{{ ChatPreviewList chats=chats }}}
     <main class="chats-page__window">
-        <div class="chats-page__history">
-        {{#each chatMessages}}
-            {{{ MessageBubble text=text out=out time=time}}}
-        {{/each}}
-        </div>
-        {{{ MessageInput }}}
+        {{#if selectedChat}}
+          {{{ ChatHeader id=selectedChat.id name=selectedChat.name src=selectedChat.src }}}
+          <div class="chats-page__history">
+          {{#each chatMessages}}
+              {{{ MessageBubble text=text out=out time=time}}}
+          {{/each}}
+          </div>
+          {{{ MessageInput }}}
+        {{/if}}
     </main>
   </div>
   `;

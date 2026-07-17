@@ -8,7 +8,9 @@ export interface FormProps extends BlockOwnProps {
   error: string;
 }
 
-export default abstract class Form extends Block<FormProps> {
+export default abstract class Form<
+  T extends FormProps = FormProps,
+> extends Block<T> {
   protected events = {
     submit: async (e: Event) => {
       e.preventDefault();
@@ -27,12 +29,12 @@ export default abstract class Form extends Block<FormProps> {
         return;
       }
 
+      this.clearError();
       const form = e.target as HTMLFormElement;
       const data = new FormData(form);
       const obj = Object.fromEntries(data);
       try {
         await this.onValidSubmit(obj);
-        this.clearError();
       } catch (e) {
         if (e instanceof HttpError) {
           this.showError(e.message);
@@ -52,10 +54,10 @@ export default abstract class Form extends Block<FormProps> {
   }
 
   protected showError(error: string) {
-    this.setProps({ error: error });
+    this.setProps({ error: error } as Partial<T>);
   }
 
   protected clearError() {
-    this.setProps({ error: '' });
+    this.setProps({ error: '' } as Partial<T>);
   }
 }

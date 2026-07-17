@@ -1,6 +1,7 @@
 import chatApi from '../../api/chat-api.ts';
 import store from '../../store/store.ts';
 import { toChatPreview } from './chat-preview-data.ts';
+import { toChatUser } from './chat-user.ts';
 
 class ChatService {
   public async fetchChats(): Promise<void> {
@@ -12,6 +13,13 @@ class ChatService {
   public async createChat(title: string): Promise<void> {
     await chatApi.createChat({ title: title });
     await this.fetchChats();
+  }
+
+  public async selectChat(id: number) {
+    const chatUserResponseItems = await chatApi.getChatUsers(id, {});
+    const chatUsers = chatUserResponseItems.map((u) => toChatUser(u));
+    store.setState('selectedChatUsers', chatUsers);
+    store.setState('selectedChatId', id);
   }
 
   public async addUsers(users: number[], chatId: number): Promise<void> {

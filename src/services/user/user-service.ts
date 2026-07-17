@@ -59,6 +59,10 @@ class UserService {
     await userApi.updateAvatar(formData);
     await this.fetchUser();
   }
+
+  public getUsersByLogin(login: string) {
+    return userApi.search({ login });
+  }
 }
 
 export default new UserService();

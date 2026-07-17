@@ -25,6 +25,10 @@ export type UpdatePasswordRequest = {
   newPassword: string;
 };
 
+export type SearchUserRequest = {
+  login: string;
+};
+
 class UserAPI extends BaseAPI {
   updateProfile(request: UpdateProfileRequest) {
     return this.put<UpdateProfileResponse>('/profile', {
@@ -40,6 +44,10 @@ class UserAPI extends BaseAPI {
 
   updatePassword(request: UpdatePasswordRequest) {
     return this.put('/password', { data: request });
+  }
+
+  search(request: SearchUserRequest) {
+    return this.post<UpdateProfileResponse[]>('/search', { data: request });
   }
 }
 

@@ -16,18 +16,28 @@ export type GetChatsResponseItem = {
 };
 
 export type MessageResponse = {
-  user: LastMessageUser;
+  user: LastUserMessage;
   time: string;
   content: string;
 };
 
-export type LastMessageUser = {
+export type LastUserMessage = {
   first_name: string;
   second_name: string;
   avatar: string | null;
   email: string;
   login: string;
   phone: string;
+};
+
+export type ChatUserResponseItem = {
+  id: number;
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  avatar: string | null;
+  role: string;
 };
 
 export type CreateChatRequest = {
@@ -41,6 +51,13 @@ export type CreateChatResponse = {
 export type ChangeUsersRequest = {
   users: number[];
   chatId: number;
+};
+
+export type GetChatUsersRequest = {
+  offset?: number;
+  limit?: number;
+  name?: string;
+  email?: string;
 };
 
 class ChatAPI extends BaseAPI {
@@ -60,6 +77,12 @@ class ChatAPI extends BaseAPI {
 
   public removeUsers(request: ChangeUsersRequest) {
     return this.delete('/users', { data: request });
+  }
+
+  getChatUsers(chatId: number, request: GetChatUsersRequest) {
+    return this.get<ChatUserResponseItem[]>(`/${chatId}/users`, {
+      queryParameters: request,
+    });
   }
 }
 

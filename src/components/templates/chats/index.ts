@@ -3,6 +3,11 @@ import { connect } from '../../core/connect.ts';
 import './chats.scss';
 import Chats from './chats.ts';
 
-export default connect(Chats, (state) => ({
-  chats: state['chats'] as ChatPreviewData[],
-}));
+export default connect(Chats, function (state) {
+  const chats = state['chats'] as ChatPreviewData[];
+  const selectedChatId = state['selectedChatId'] as number;
+  return {
+    chats: chats,
+    selectedChat: chats?.find((c) => c.id === selectedChatId),
+  };
+});

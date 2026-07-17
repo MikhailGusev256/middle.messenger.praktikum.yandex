@@ -110,14 +110,14 @@
 - [x] **T4.1** Расширить модель `User` (`services/user/user.ts`) до реальных полей.
 - [x] **T4.2** `user-api.ts` — `updateProfile`, `updateAvatar` (FormData), `updatePassword`.
 - [x] **T4.3** Профиль через `connect` (убрать хардкод «Иван»); аватар = `.../api/v2/resources` + `avatar`.
-- [ ] **T4.4** Подключить `EditProfileForm`, `EditPasswordForm`, file-input аватара к сервису; обновлять стор при успехе.
+- [x] **T4.4** Подключить `EditProfileForm`, `EditPasswordForm`, file-input аватара к сервису; обновлять стор при успехе.
 
 ## Фаза 5 — Чаты (список, создание, добавить/удалить участника)
-Эндпоинты: `GET /chats`, `POST /chats`, `PUT /chats/users`, `DELETE /chats/users`, `POST /user/search`.
-- [ ] **T5.1** `chat-api.ts` — `list`, `create`, `addUser`, `removeUser`.
-- [ ] **T5.2** `chat-service.ts` — реальный `GET /chats` в стор; `createChat`, `addUser`, `removeUser`.
-- [ ] **T5.3** UI: контрол «создать чат» в `ChatPreviewList` и добавить/удалить участника в открытом чате (переиспользовать `Input`/`Button`/`Form`).
-- [ ] **T5.4** Список чатов через `connect`.
+Эндпоинты: `GET /chats`, `POST /chats`, `PUT /chats/users`, `DELETE /chats/users`.
+- [ ] **T5.1** `chat-api.ts` — `getChats`, `createChat`, `addUsers`, `removeUsers`.
+- [ ] **T5.2** `chat-service.ts` — реальный `GET /chats` в стор; `createChat`, `addUsers`, `removeUsers`.
+- [ ] **T5.3** UI: контрол «создать чат» в `ChatPreviewList` и добавить/удалить участника в открытом чате (переиспользовать `Input`/`Button`/`Form`). Участник задаётся **числовым id** — `PUT/DELETE /chats/users` принимают `users: number[]`. Поиск по логину (`POST /user/search`) в требованиях спринта нет, не делаем.
+- [x] **T5.4** Список чатов через `connect` — сделано и проверено: сервис пишет `setState('chats')`, `templates/chats/index.ts` мапит слайс, список приезжает с сервера.
 
 ## Фаза 6 — Документация и проверка
 - [ ] **T6.1** Обновить `README.md` (функциональность + инструменты).

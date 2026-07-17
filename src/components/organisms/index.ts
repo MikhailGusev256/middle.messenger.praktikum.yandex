@@ -1,3 +1,4 @@
-﻿import './chat-preview-list';
+﻿import './chat-header';
+import './chat-preview-list';
 import './login-card';
 import './register-card';
