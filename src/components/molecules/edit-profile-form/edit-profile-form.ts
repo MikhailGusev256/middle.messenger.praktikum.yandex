@@ -1,7 +1,12 @@
 import userService from '../../../services/user/user-service.ts';
-import Form from '../../core/form.ts';
+import type { User } from '../../../services/user/user.ts';
+import Form, { type FormProps } from '../../core/form.ts';
 
-export default class EditProfileForm extends Form {
+interface EditProfileFormProps extends FormProps {
+  user?: User;
+}
+
+export default class EditProfileForm extends Form<EditProfileFormProps> {
   static componentName = 'EditProfileForm';
 
   protected template = `
@@ -9,6 +14,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="email"
             name="email"
+            value=user.email
             type="email"
             label="Почта"
             validationRule="email" }}}
@@ -16,6 +22,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="login"
             name="login"
+            value=user.login
             type="text"
             label="Логин"
             validationRule="login"
@@ -25,6 +32,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="first_name"
             name="first_name"
+            value=user.first_name
             validationRule="name"
             type="text"
             label="Имя" }}}
@@ -32,6 +40,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="second_name"
             name="second_name"
+            value=user.second_name
             validationRule="name"
             type="text"
             label="Фамилия" }}}
@@ -39,6 +48,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="display_name"
             name="display_name"
+            value=user.display_name
             validationRule="name"
             type="text"
             label="Имя в чате" }}}
@@ -46,6 +56,7 @@ export default class EditProfileForm extends Form {
         {{{ Input
             id="phone"
             name="phone"
+            value=user.phone
             type="tel"
             label="Телефон"
             validationRule="phone" }}}

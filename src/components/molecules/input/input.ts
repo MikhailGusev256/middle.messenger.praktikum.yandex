@@ -50,7 +50,8 @@ export default class Input extends Block<InputProps> {
       ref="input"
       aria-label="{{aria-label}}"
       placeholder="{{placeholder}}"
-      autocomplete="{{autocomplete}}"/>
+      autocomplete="{{autocomplete}}"
+      value="{{value}}"/>
     <span class="validation-error-text" ref="validation"></span>
   </div>
   `;

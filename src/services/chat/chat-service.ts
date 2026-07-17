@@ -4,14 +4,23 @@ import { toChatPreview } from './chat-preview-data.ts';
 import { toChatUser } from './chat-user.ts';
 
 class ChatService {
-  public async fetchChats(): Promise<void> {
-    const response = await chatApi.getChats();
+  public async fetchChats(
+    filter?: string,
+    offset?: number,
+    limit?: number,
+  ): Promise<void> {
+    const response = await chatApi.getChats({ title: filter, offset, limit });
     const chatPreviews = response.map((c) => toChatPreview(c));
     store.setState('chats', chatPreviews);
   }
 
   public async createChat(title: string): Promise<void> {
     await chatApi.createChat({ title: title });
+    await this.fetchChats();
+  }
+
+  public async deleteChat(id: number): Promise<void> {
+    await chatApi.deleteChat({ chatId: id });
     await this.fetchChats();
   }
 

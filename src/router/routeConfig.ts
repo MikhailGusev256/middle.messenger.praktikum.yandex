@@ -33,13 +33,13 @@ export const routeConfigs = [
     name: 'error404',
     path: '/404',
     view: errorTmpl.Error404,
-    public: false,
+    public: true,
   },
   {
     name: 'error500',
     path: '/500',
     view: errorTmpl.Error500,
-    public: false,
+    public: true,
   },
 ] as const;
 export const pathByName = new Map(routeConfigs.map((c) => [c.name, c.path]));

@@ -44,6 +44,22 @@ export type CreateChatRequest = {
   title: string;
 };
 
+export type DeleteChatRequest = {
+  chatId: number;
+};
+
+export type DeleteChatResponse = {
+  userId: number;
+  result: DeleteChatResult;
+};
+
+export type DeleteChatResult = {
+  id: number;
+  title: string;
+  avatar: string;
+  created_by: number;
+};
+
 export type CreateChatResponse = {
   id: number;
 };
@@ -69,6 +85,10 @@ class ChatAPI extends BaseAPI {
 
   public createChat(request: CreateChatRequest) {
     return this.post<CreateChatResponse>('/', { data: request });
+  }
+
+  public deleteChat(request: DeleteChatRequest) {
+    return this.delete<DeleteChatResponse>('/', { data: request });
   }
 
   public addUsers(request: ChangeUsersRequest) {

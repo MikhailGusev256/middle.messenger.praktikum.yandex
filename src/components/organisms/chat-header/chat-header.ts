@@ -1,3 +1,4 @@
+import chatService from '../../../services/chat/chat-service.ts';
 import Block, {
   type BlockOwnProps,
   type EventListType,
@@ -35,6 +36,7 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
       <div class="chat-header__menu" role="menu">
         <button type="button" class="chat-header__menu-item" data-role="menu-add" role="menuitem">Добавить пользователя</button>
         <button type="button" class="chat-header__menu-item" data-role="menu-remove" role="menuitem">Удалить пользователя</button>
+        <button type="button" class="chat-header__menu-item" data-role="menu-delete-chat" role="menuitem">Удалить чат</button>
       </div>
     {{/if}}
 
@@ -49,7 +51,7 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
   `;
 
   protected events: EventListType = {
-    click: (e) => {
+    click: async (e) => {
       const target = e.target as HTMLElement;
       const openToggleButton = target.closest('[data-role="menu-toggle"]');
       if (openToggleButton) {
@@ -61,9 +63,15 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
         this.setProps({ isMenuOpen: false, formMode: 'add' });
         return;
       }
-      const removeButton = target.closest('[data-role="menu-remove"]');
-      if (removeButton) {
+      const removeUserButton = target.closest('[data-role="menu-remove"]');
+      if (removeUserButton) {
         this.setProps({ isMenuOpen: false, formMode: 'remove' });
+        return;
+      }
+
+      const deleteChatButton = target.closest('[data-role="menu-delete-chat"]');
+      if (deleteChatButton) {
+        await chatService.deleteChat(this.props.id);
         return;
       }
     },

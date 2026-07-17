@@ -39,6 +39,7 @@ export interface RequestOptions {
   timeout?: number;
   headers?: Record<string, string>;
 }
+
 interface RequestOptionsWithMethod extends RequestOptions {
   method: keyof typeof METHODS;
 }
@@ -50,49 +51,23 @@ class HTTPTransport {
     this._baseUrl = apiUrl + baseUrl;
   }
 
-  get = <TResponse = unknown>(
-    shortUrl: string,
-    options: RequestOptions = {},
-  ): Promise<TResponse> => {
-    return this.request(
-      shortUrl,
-      { ...options, method: METHODS.GET },
-      options.timeout,
-    );
-  };
+  private makeMethod(requestMethod: keyof typeof METHODS) {
+    return <TResponse = unknown>(
+      shortUrl: string,
+      options: RequestOptions = {},
+    ): Promise<TResponse> => {
+      return this.request(
+        shortUrl,
+        { ...options, method: requestMethod },
+        options.timeout,
+      );
+    };
+  }
 
-  post = <TResponse = unknown>(
-    shortUrl: string,
-    options: RequestOptions = {},
-  ): Promise<TResponse> => {
-    return this.request(
-      shortUrl,
-      { ...options, method: METHODS.POST },
-      options.timeout,
-    );
-  };
-
-  put = <TResponse = unknown>(
-    shortUrl: string,
-    options: RequestOptions = {},
-  ): Promise<TResponse> => {
-    return this.request(
-      shortUrl,
-      { ...options, method: METHODS.PUT },
-      options.timeout,
-    );
-  };
-
-  delete = <TResponse = unknown>(
-    shortUrl: string,
-    options: RequestOptions = {},
-  ): Promise<TResponse> => {
-    return this.request(
-      shortUrl,
-      { ...options, method: METHODS.DELETE },
-      options.timeout,
-    );
-  };
+  get = this.makeMethod(METHODS.GET);
+  post = this.makeMethod(METHODS.POST);
+  put = this.makeMethod(METHODS.PUT);
+  delete = this.makeMethod(METHODS.DELETE);
 
   request = <TResponse = unknown>(
     shortUrl: string,

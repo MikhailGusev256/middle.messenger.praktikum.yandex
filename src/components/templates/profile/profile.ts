@@ -26,7 +26,7 @@ export default class Profile extends Block<ProfileProps> {
           {{/ifEquals}}
 
           {{#ifEquals targetMode "edit-profile"}}
-            {{{ EditProfileForm onDone=changeToViewMode }}}
+            {{{ EditProfileForm onDone=changeToViewMode user=user }}}
           {{/ifEquals}}
 
           {{#ifEquals targetMode "view"}}
