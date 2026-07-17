@@ -7,7 +7,6 @@ export default connect(Chats, function (state) {
   const chats = state['chats'] as ChatPreviewData[];
   const selectedChatId = state['selectedChatId'] as number;
   return {
-    chats: chats,
     selectedChat: chats?.find((c) => c.id === selectedChatId),
   };
 });

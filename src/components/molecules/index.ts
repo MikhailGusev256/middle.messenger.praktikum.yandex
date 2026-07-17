@@ -1,5 +1,6 @@
 ﻿import './add-user-form';
 import './chat-preview';
+import './chat-preview-list';
 import './create-chat-form';
 import './edit-password-form';
 import './edit-profile-form';

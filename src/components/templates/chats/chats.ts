@@ -4,7 +4,6 @@ import chatService from '../../../services/chat/chat-service.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
 
 interface ChatsProps extends BlockOwnProps {
-  chats: ChatPreviewData[];
   selectedChat?: ChatPreviewData;
   chatMessages: ChatMessage[];
 }
@@ -14,7 +13,7 @@ export default class Chats extends Block<ChatsProps> {
 
   protected template = `
   <div class="chats-page">
-    {{{ ChatPreviewList chats=chats }}}
+    {{{ LeftSidePanel }}}
     <main class="chats-page__window">
         {{#if selectedChat}}
           {{{ ChatHeader id=selectedChat.id name=selectedChat.name src=selectedChat.src }}}
