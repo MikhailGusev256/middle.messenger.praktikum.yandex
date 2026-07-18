@@ -1,7 +1,8 @@
-﻿import { registerComponent } from '../../core/registerComponent.ts';
+﻿import type { User } from '../../../services/user/user.ts';
+import { connect } from '../../core/connect.ts';
 import './profile.scss';
 import Profile from './profile.ts';
 
-registerComponent(Profile);
-
-export default Profile;
+export default connect(Profile, (state) => ({
+  user: state['user'] as User,
+}));

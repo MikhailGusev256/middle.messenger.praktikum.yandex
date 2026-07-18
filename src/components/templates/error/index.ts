@@ -1,7 +1,4 @@
-import { registerComponent } from '../../core/registerComponent.ts';
 import './error.scss';
-import Error from './error.ts';
+import { Error404, Error500 } from './error.ts';
 
-registerComponent(Error);
-
-export default Error;
+export default { Error404, Error500 };

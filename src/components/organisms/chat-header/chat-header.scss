@@ -1,0 +1,59 @@
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  position: relative;
+
+  &__name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--font-size-m);
+  }
+
+  &__menu-button {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    font-size: var(--font-size-m);
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(0 0 0 / 5%);
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: 100%;
+    right: 1rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 20rem;
+    padding: 0.5rem 0;
+    border-radius: 0.6rem;
+    background: #fff;
+    box-shadow: 0 0.2rem 1rem rgb(0 0 0 / 15%);
+  }
+
+  &__menu-item {
+    padding: 0.8rem 1.6rem;
+    border: none;
+    background: transparent;
+    font-size: var(--font-size-m);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(0 0 0 / 5%);
+    }
+  }
+}

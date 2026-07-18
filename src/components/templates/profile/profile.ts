@@ -1,64 +1,58 @@
+import userService from '../../../services/user/user-service.ts';
+import type { User } from '../../../services/user/user.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
-import isProfileMode, { type ProfileModes } from './view-modes.ts';
+import { type ProfileModes } from './view-modes.ts';
 
 interface ProfileProps extends BlockOwnProps {
   targetMode: ProfileModes;
   changeToViewMode: () => void;
+  changeToEditProfileMode: () => void;
+  changeToEditPasswordMode: () => void;
+  logout: () => void;
+  user?: User;
 }
 
 export default class Profile extends Block<ProfileProps> {
   public static componentName = 'Profile';
 
-  protected events = {
-    click: (e: Event) => {
-      const modeElement = (e.target as HTMLElement).closest<HTMLElement>(
-        '[data-page-mode]',
-      );
-      if (!modeElement) {
-        return;
-      }
-      const targetMode = modeElement.dataset.pageMode;
-      if (isProfileMode(targetMode)) {
-        this.setMode(targetMode);
-      }
-    },
-  };
-
   protected template = `
   <div class="profile-page">
     {{{ GoBackPanel }}}
     <main class="profile">
-        
+
         <div class="profile__data-and-link-separator">
           {{#ifEquals targetMode "edit-password"}}
             {{{ EditPasswordForm onDone=changeToViewMode }}}
           {{/ifEquals}}
-          
+
           {{#ifEquals targetMode "edit-profile"}}
-            {{{ EditProfileForm onDone=changeToViewMode }}}
+            {{{ EditProfileForm onDone=changeToViewMode user=user }}}
           {{/ifEquals}}
-          
+
           {{#ifEquals targetMode "view"}}
             <div class="profile__header">
-                {{{ Avatar name="Иван"}}}
-                <h1 class="hl">Иван</h1>
+                {{{ EditableAvatar src=user.avatar name=user.display_name}}}
+                <h1 class="hl">{{user.display_name}}</h1>
             </div>
             <div class="profile__link-wrapper">
-              {{{ Link data-page-mode="edit-profile" text="Изменить данные" }}}
-              {{{ Link data-page-mode="edit-password" text="Изменить пароль" }}}
-              {{{ Link data-page="login" text="Выйти" danger=true }}}
+              {{{ Button onClick=changeToEditProfileMode text="Изменить данные" isLinkView=true }}}
+              {{{ Button onClick=changeToEditPasswordMode text="Изменить пароль" isLinkView=true }}}
+              {{{ Button onClick=logout text="Выйти" isLinkView=true isDangerAction=true }}}
             </div>
           {{/ifEquals}}
-          
+
         </div>
     </main>
   </div>
   `;
 
-  constructor() {
-    super();
+  constructor(args: ProfileProps = {} as ProfileProps) {
+    super(args);
     this.props.targetMode = 'view';
     this.props.changeToViewMode = () => this.setMode('view');
+    this.props.changeToEditProfileMode = () => this.setMode('edit-profile');
+    this.props.changeToEditPasswordMode = () => this.setMode('edit-password');
+    this.props.logout = () => userService.logout();
   }
 
   private setMode(mode: ProfileModes): void {

@@ -8,31 +8,31 @@ export interface BlockOwnProps {
   __refs?: Record<string, Element>;
 }
 
-type EventListType = Partial<
+export type EventListType = Partial<
   Record<keyof HTMLElementEventMap, (e: Event) => void>
 >;
 
-export interface ComponentClass {
-  new (props?: object): Block;
+export interface ComponentClass<T extends BlockOwnProps = BlockOwnProps> {
+  new (props?: T): Block<T>;
   componentName: string;
 }
 
-export default abstract class Block<
-  Props extends BlockOwnProps = BlockOwnProps,
-> {
+export default abstract class Block<T extends BlockOwnProps = BlockOwnProps> {
+  private hasMounted = false;
+
   protected children: Block<object>[] = [];
 
   private domElement: Element | null = null;
 
   protected events: EventListType = {};
 
-  protected props = {} as Props;
+  protected props = {} as T;
 
   protected refs: Record<string, Element> = {};
 
-  protected abstract template: string;
+  protected template: string = '';
 
-  constructor(props: Props = {} as Props) {
+  constructor(props: T = {} as T) {
     this.props = props;
   }
 
@@ -93,6 +93,11 @@ export default abstract class Block<
 
   private mountComponent() {
     this.attachListeners();
+    // Чтобы не было повторных обращений к API при ререндере компонента
+    if (this.hasMounted) {
+      return;
+    }
+    this.hasMounted = true;
     this.componentDidMount();
   }
 
@@ -107,10 +112,10 @@ export default abstract class Block<
     }
   }
 
-  protected render(): Element {
+  private render(): Element {
     this.unmountComponent();
     const fragment = this.compile();
-    if (this.domElement && fragment) {
+    if (this.domElement) {
       this.domElement.replaceWith(fragment);
     }
     this.domElement = fragment;
@@ -118,13 +123,13 @@ export default abstract class Block<
     return fragment;
   }
 
-  public setProps(props: Partial<Props>) {
+  public setProps(props: Partial<T>) {
     this.props = {
       ...this.props,
       ...props,
       __children: [],
       __refs: {},
-    } as Props;
+    } as T;
     this.render();
   }
 
@@ -135,5 +140,11 @@ export default abstract class Block<
       this.componentWillUnmount();
       this.removeListeners();
     }
+  }
+
+  public destroy() {
+    this.unmountComponent();
+    this.domElement?.remove();
+    this.domElement = null;
   }
 }

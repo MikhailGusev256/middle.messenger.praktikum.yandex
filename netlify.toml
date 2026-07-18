@@ -1,0 +1,8 @@
+# Запросы /api/v2/* обрабатывает edge-функция netlify/edge-functions/api-proxy.ts
+# (прокси к ya-praktikum API с переписыванием Domain у Set-Cookie).
+
+# SPA-fallback: прямые ссылки и F5 на /messenger, /settings и т.д. отдают index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

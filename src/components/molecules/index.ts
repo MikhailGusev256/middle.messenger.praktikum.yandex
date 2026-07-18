@@ -1,9 +1,14 @@
-﻿import './chat-preview';
+﻿import './add-user-form';
+import './chat-preview';
+import './chat-preview-list';
+import './create-chat-form';
 import './edit-password-form';
 import './edit-profile-form';
+import './editable-avatar';
 import './go-back-panel';
 import './input';
 import './login-form';
 import './message-bubble';
 import './message-input';
 import './register-form';
+import './remove-user-list';

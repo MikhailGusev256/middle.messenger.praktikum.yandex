@@ -7,6 +7,7 @@ interface InputProps extends BlockOwnProps {
 
 export default class Input extends Block<InputProps> {
   static componentName = 'Input';
+  static validationErrorClass = 'validation-error-text--visible';
 
   public isValid = (): boolean => {
     const validationRule = this.props.validationRule;
@@ -16,32 +17,41 @@ export default class Input extends Block<InputProps> {
     const input = this.refs.input as HTMLInputElement;
     const { isValid, errorMessage } = validate(validationRule, input.value);
 
-    const validationErrorClass = 'validation-error-text--visible';
-    const validationDisplay = this.refs.validation;
     if (isValid) {
-      validationDisplay.textContent = '';
-      validationDisplay.classList.remove(validationErrorClass);
+      this.clearError();
     } else {
-      validationDisplay.classList.add(validationErrorClass);
-      validationDisplay.textContent = errorMessage;
+      this.setError(errorMessage);
     }
     return isValid;
   };
+
+  public clearError() {
+    const validationDisplay = this.refs.validation;
+    validationDisplay.textContent = '';
+    validationDisplay.classList.remove(Input.validationErrorClass);
+  }
+
+  public setError(errorMessage: string) {
+    const validationDisplay = this.refs.validation;
+    validationDisplay.classList.add(Input.validationErrorClass);
+    validationDisplay.textContent = errorMessage;
+  }
 
   protected template = `
   <div class="input">
     {{#if label}}
         <label class="input__label" for="{{id}}">{{label}}</label>
     {{/if}}
-    <input 
-      class="input__field" 
-      id="{{id}}" 
-      type="{{type}}" 
-      name="{{name}}" 
-      ref="input" 
+    <input
+      class="input__field"
+      id="{{id}}"
+      type="{{type}}"
+      name="{{name}}"
+      ref="input"
       aria-label="{{aria-label}}"
       placeholder="{{placeholder}}"
-      autocomplete="{{autocomplete}}"/>
+      autocomplete="{{autocomplete}}"
+      value="{{value}}"/>
     <span class="validation-error-text" ref="validation"></span>
   </div>
   `;

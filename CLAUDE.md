@@ -20,10 +20,13 @@ This is a Yandex Praktikum educational project — a messenger web application b
 
 ## Commands
 
+Run from the repository root (the project **is** the root — there is no `messenger/` subdirectory).
+
 ```bash
-cd messenger
 npm install       # install dependencies
 npm run dev       # start dev server (Vite HMR)
+npm run build     # tsc --noEmit + vite build (must be clean before a PR)
+npm run lint      # prettier + tsc + stylelint + eslint
 ```
 
 ## Architecture
@@ -51,8 +54,32 @@ Conventions:
 - **`index.ts`** — imports `./name.scss`, imports the class, and calls `registerComponent(Name)` for its side effect. Template folders also `export default` the class.
 - **Barrel `index.ts`** files (`atoms/index.ts`, `molecules/index.ts`, …) import every component folder for its registration side effect. A new component is invisible until added to its barrel; barrels are imported by `app.ts`.
 - **`helpers/`** — plain Handlebars helpers (e.g. `firstLetter`), registered the same way via their own barrel.
-- **Templates** (pages) are themselves `Block` subclasses, wired into `templates/index.ts`: `TemplateName` union, `TemplateMap` (instantiated `Block`s keyed by page), `ContextMap` (per-page props). `App` (`app.ts`) appends the current page's `element()` to `#app` and calls `setProps(context)`; `main.ts` bootstraps with `new App().render()`.
+- **Templates** (pages) are themselves `Block` subclasses, wired into `templates/index.ts`: `TemplateNames` union, `TemplateMap`, and `ContextMap` (per-page props). Pages are now mounted by the **router**, not by a switch in `App` — see _Routing_ below.
 - **Static assets (SVG)**: import with `?raw` and inline them (e.g. via a component template or helper).
+
+## Routing
+
+- **`src/router/`** — a small SPA router. `main.ts` bootstraps with `new App().start()`; `App` (`src/app.ts`) owns the router (`Router.initialize('#app')`) and calls `router.start()`. There is no longer a switch-based page renderer in `App`.
+- **`router.ts`** — `Router` singleton (`initialize(rootQuery)` / `instance()`). `use(path, block)` registers a `Route`; `start()` wires `window.onpopstate` and renders the current `window.location.pathname`; `go(name)`, `back()`, `forward()` drive `history`. **Note:** `go()` takes a **template name** (e.g. `'chats'`), not a URL — it resolves the path via `pathByName`. `onRoute()` is the place for the **auth guard** (redirect unauthorized users to `/`) and the `/404` fallback for unmatched paths.
+- **`route.ts`** — mounts one `Block` at a time: `render()` destroys the previous block (`leave()` → `Block.destroy()`) and `replaceChildren(block.element())`, guaranteeing a single page in the DOM. `match()` is exact-path equality.
+- **`routeConfig.ts`** — the route table: `name` → `path` → `view` (`Block` class), plus `pathByName`. Routes: `/`→login, `/sign-up`→register, `/messenger`→chats, `/settings`→profile, `/404` & `/500`→error.
+- **Navigation** from the UI goes through the `Link` atom (`click` → `Router.instance().go(page)`) and `GoBackPanel` (`Router.instance().back()`) — do not use raw `<a href>` for in-app navigation.
+
+## State: store & connect
+
+- **`src/store/store.ts`** — a singleton reactive store (the app's single source of truth, ≈ a scoped state container). `getState()`, `setState(path, value)` (immutable — rebuilds state via `merge(state, set({}, path, value))`), and `subscribe(listener)` which returns an unsubscribe function. `setState` notifies all listeners.
+- **`src/components/core/connect.ts`** — `connect(Component, mapStateToProps)` HOC (and `connectFn`) that binds a store slice into a `Block`'s props and re-renders (via `setProps`) only when that slice changes (guarded by `isEqual`). This is the connect / `mapStateToProps` pattern — the Blazor `CascadingValue` + `StateHasChanged` analogy. Use it to feed live user/chat data into pages instead of hardcoding.
+
+## HTTP & API
+
+- **`src/utils/http.ts`** — `HTTPTransport`, an XHR + `Promise` wrapper (a typed `HttpClient`). Supports GET/POST/PUT/DELETE; **GET** serializes params to a query string, other methods send a JSON body (or raw `FormData`, e.g. avatar upload). Sets `withCredentials` for the cookie-based session. **Only XHR is allowed — no fetch/axios/other libraries** (sprint rule).
+- **`src/api/*`** — typed API clients over `BaseAPI`, one per resource (auth/user/chat). Base URL is the ya-praktikum API `https://ya-praktikum.tech/api/v2`; resource files (`avatar` etc.) live under `/resources`.
+- **Error handling**: raise/surface specific errors per API failure (e.g. wrong password) up to the form — avoid generic `try/catch` + `console.log`. Use only **test** data (no real names/emails/phones).
+
+## Services
+
+- **`src/services/`** — the layer between forms and the store. A service (`user-service`, `chat-service`) calls an API client, then writes the result into the store (and may trigger a `Router` redirect, e.g. login → `go('chats')`). Flow: **form → service → API → store → connect → UI**.
+- **`src/components/core/form.ts`** — `Form` base class: on `submit` it validates every child `Input` (`isValid()`), builds a `FormData`, and calls `onValidSubmit(e, data)`. Concrete forms **override `onValidSubmit`** to call a service (instead of just logging). Validation rules live in `src/utils/validation.ts` and run inside the `Input` molecule.
 
 ## CSS Principles
 

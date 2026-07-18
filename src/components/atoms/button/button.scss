@@ -7,3 +7,18 @@
   width: 100%;
   cursor: pointer;
 }
+
+.button--link {
+  background-color: transparent;
+  color: var(--color-accent);
+  height: auto;
+  width: auto;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.button--danger {
+  color: var(--color-danger);
+}
