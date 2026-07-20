@@ -17,7 +17,10 @@
     "lint:types": "tsc --noEmit",
     "lint": "npm run format && npm run lint:types && npm run lint:css && npm run lint:js",
     "lint:fix": "npm run format:fix && npm run lint:css:fix && npm run lint:js:fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -28,6 +31,7 @@
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "jiti": "^2.7.0",
+    "jsdom": "^29.1.1",
     "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
     "prettier-plugin-organize-imports": "^4.3.0",
@@ -36,7 +40,8 @@
     "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.61.1",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "handlebars": "^4.7.9"
