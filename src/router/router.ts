@@ -2,7 +2,7 @@ import type Block from '../components/core/block.ts';
 import type { TemplateNames } from '../components/templates';
 import store from '../store/store.ts';
 import Route from './route.ts';
-import { pathByName, routeConfigs } from './routeConfig.ts';
+import { type RouteConfig } from './routeConfig.ts';
 
 export default class Router {
   private static __instance: Router;
@@ -11,28 +11,31 @@ export default class Router {
   private routes: Route[] = [];
   private history: History = window.history;
   private _currentRoute: Route | undefined = undefined;
+  private pathByName;
 
-  static initialize(rootQuery: string): Router {
+  static initialize(rootQuery: string, routes: RouteConfig[]): Router {
     if (Router.__instance) {
       return Router.__instance;
     }
-    return new Router(rootQuery);
+    return new Router(rootQuery, routes);
   }
 
   static instance(): Router {
     return Router.__instance;
   }
 
-  private constructor(rootQuery: string) {
+  private constructor(rootQuery: string, routes: RouteConfig[]) {
     const rootElement = document.querySelector(rootQuery);
     if (!rootElement) {
       throw Error('Невозможно найти корневой элемент');
     }
     Router.__instance = this;
 
-    for (const config of routeConfigs) {
+    for (const config of routes) {
       this.use(config.path, config.public, config.view);
     }
+
+    this.pathByName = new Map(routes.map((c) => [c.name, c.path]));
 
     this._rootElement = rootElement;
   }
@@ -79,7 +82,7 @@ export default class Router {
   }
 
   public go(pathname: TemplateNames, replaceState?: boolean) {
-    const path = pathByName.get(pathname);
+    const path = this.pathByName.get(pathname);
     if (!path) {
       throw new Error('Не удалось найти путь для шаблона');
     }

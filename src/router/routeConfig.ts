@@ -1,10 +1,19 @@
+import type Block from '../components/core/block.ts';
+import type { TemplateNames } from '../components/templates';
 import chatsTmpl from '../components/templates/chats';
 import errorTmpl from '../components/templates/error';
 import loginTmpl from '../components/templates/login';
 import profileTmpl from '../components/templates/profile';
 import registerTmpl from '../components/templates/register';
 
-export const routeConfigs = [
+export type RouteConfig = {
+  name: TemplateNames;
+  path: string;
+  view: new () => Block;
+  public: boolean;
+};
+
+export const routeConfigs: RouteConfig[] = [
   {
     name: 'login',
     path: '/',
@@ -42,4 +51,3 @@ export const routeConfigs = [
     public: true,
   },
 ] as const;
-export const pathByName = new Map(routeConfigs.map((c) => [c.name, c.path]));
