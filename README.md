@@ -2,7 +2,7 @@
 
 Учебный проект — веб-приложение мессенджера
 
-Стек: Vite + TypeScript + Handlebars + Sass.
+Стек: Vite + TypeScript + Handlebars + Sass. Тесты — Vitest (+ jsdom).
 
 Интерфейс взят из готового макета: [Figma](https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0-1)
 
@@ -41,7 +41,16 @@ npm run start   # сборка и запуск превью продакшен-�
 npm run lint    # prettier + tsc + stylelint + eslint
 ```
 
-Требуется Node.js версии 22 или выше.
+Требуется Node.js версии 22 или выше. Для воспроизводимой установки — `npm ci`.
+
+## Тесты
+
+Тесты написаны на [Vitest](https://vitest.dev/) и лежат рядом с тестируемыми модулями (`*.test.ts`).
+
+```bash
+npm test          # watch-режим
+npm run test:run  # однократный прогон (CI, precommit)
+```
 
 ## Деплой
 
