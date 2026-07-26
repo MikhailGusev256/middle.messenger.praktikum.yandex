@@ -1,9 +1,12 @@
 import chatApi from '../../api/chat-api.ts';
 import store from '../../store/store.ts';
 import messageService from '../message/message-service.ts';
-import { SELECTED_CHAT_USERS_KEY } from '../user/user-selectors.ts';
 import { toChatPreview } from './chat-preview-data.ts';
-import { CHATS_KEY, SELECTED_CHAT_ID_KEY } from './chat-selectors.ts';
+import {
+  CHATS_KEY,
+  SELECTED_CHAT_ID_KEY,
+  SELECTED_CHAT_USERS_KEY,
+} from './chat-selectors.ts';
 import { toChatUser } from './chat-user.ts';
 
 class ChatService {

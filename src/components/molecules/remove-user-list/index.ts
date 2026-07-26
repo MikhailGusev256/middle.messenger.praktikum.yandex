@@ -1,4 +1,4 @@
-import { selectChatUsers } from '../../../services/user/user-selectors.ts';
+import { selectChatUsers } from '../../../services/chat/chat-selectors.ts';
 import { connect } from '../../core/connect.ts';
 import { registerComponent } from '../../core/registerComponent.ts';
 import './remove-user-list.scss';
