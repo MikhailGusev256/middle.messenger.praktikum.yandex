@@ -62,6 +62,10 @@ export class WsTransport {
       return;
     }
 
+    if (socket.readyState !== WebSocket.OPEN) {
+      throw new Error('Соединение разорвано');
+    }
+
     socket.send(JSON.stringify(data));
   }
 
