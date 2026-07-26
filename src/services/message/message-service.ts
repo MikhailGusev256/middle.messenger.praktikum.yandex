@@ -1,8 +1,9 @@
 import chatApi from '../../api/chat-api.ts';
 import store from '../../store/store.ts';
 import { WsTransport } from '../../utils/ws.ts';
-import type { User } from '../user/user.ts';
-import { type ChatMessage, toMessage } from './chat-message.ts';
+import { selectUserId } from '../user/user-selectors.ts';
+import { toMessage } from './chat-message.ts';
+import { selectCurrentChatMessages } from './message-selectors.ts';
 import type { NewChatMessageDto } from './new-chat-message-dto.ts';
 import type { OldChatMessageDto } from './old-chat-message-dto.ts';
 
@@ -44,18 +45,18 @@ export class MessageService {
 
   private async getTransportUrl(chatId: number) {
     const chatToken = await chatApi.getChatToken(chatId);
-    const userId = this.getUserId();
+    const userId = selectUserId(store.getState());
     const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const host = window.location.host;
     return `${scheme}://${host}/ws/chats/${userId}/${chatId}/${chatToken}`;
   }
 
   private storeReceivedMessages(data: unknown) {
-    const userId = this.getUserId();
+    const state = store.getState();
+    const userId = selectUserId(state);
     if (this.isSingleMessage(data)) {
       const message = toMessage(data, userId);
-      const currentMessages =
-        (store.getState()['messages'] as ChatMessage[]) ?? [];
+      const currentMessages = selectCurrentChatMessages(state);
       store.setState('messages', [...currentMessages, message]);
     }
     if (this.isMessageArray(data)) {
@@ -66,11 +67,6 @@ export class MessageService {
 
       store.setState('messages', orderedMessages);
     }
-  }
-
-  private getUserId() {
-    const user = store.getState()['user'] as User;
-    return user.id;
   }
 
   private isSingleMessage(data: unknown): data is NewChatMessageDto {
