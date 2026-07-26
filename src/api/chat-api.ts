@@ -76,6 +76,10 @@ export type GetChatUsersRequest = {
   email?: string;
 };
 
+export type ChatTokenResponse = {
+  token: string;
+};
+
 class ChatAPI extends BaseAPI {
   public getChats(request: GetChatsRequest = {}) {
     return this.get<GetChatsResponseItem[]>('/', {
@@ -99,10 +103,15 @@ class ChatAPI extends BaseAPI {
     return this.delete('/users', { data: request });
   }
 
-  getChatUsers(chatId: number, request: GetChatUsersRequest) {
+  public getChatUsers(chatId: number, request: GetChatUsersRequest) {
     return this.get<ChatUserResponseItem[]>(`/${chatId}/users`, {
       queryParameters: request,
     });
+  }
+
+  public async getChatToken(chatId: number) {
+    const result = await this.post<ChatTokenResponse>(`/token/${chatId}`);
+    return result.token;
   }
 }
 
