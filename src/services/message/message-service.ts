@@ -1,4 +1,5 @@
 import chatApi from '../../api/chat-api.ts';
+import { wsOrigin } from '../../api/constants.ts';
 import store from '../../store/store.ts';
 import { WsTransport } from '../../utils/ws.ts';
 import { selectUserId } from '../user/user-selectors.ts';
@@ -58,9 +59,7 @@ class MessageService {
   private async getTransportUrl(chatId: number) {
     const chatToken = await chatApi.getChatToken(chatId);
     const userId = selectUserId(store.getState());
-    const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = window.location.host;
-    return `${scheme}://${host}/ws/chats/${userId}/${chatId}/${chatToken}`;
+    return `${wsOrigin}/ws/chats/${userId}/${chatId}/${chatToken}`;
   }
 
   private storeReceivedMessages(data: unknown) {
