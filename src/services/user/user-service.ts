@@ -15,6 +15,7 @@ class UserService {
     const data = await authApi.user();
     const user = toUser(data);
     store.setState('user', user);
+    return user;
   }
 
   public async register(request: SignUpRequest) {

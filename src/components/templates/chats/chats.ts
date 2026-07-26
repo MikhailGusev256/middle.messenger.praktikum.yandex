@@ -1,6 +1,6 @@
-import type { ChatMessage } from '../../../services/chat/chat-message.ts';
 import type { ChatPreviewData } from '../../../services/chat/chat-preview-data.ts';
 import chatService from '../../../services/chat/chat-service.ts';
+import type { ChatMessage } from '../../../services/message/chat-message.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
 
 interface ChatsProps extends BlockOwnProps {
