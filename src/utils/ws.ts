@@ -1,13 +1,14 @@
 type WsTransportOptions = {
   getUrl: () => Promise<string>;
   onMessage: (data: unknown) => void;
-  pingMessage?: unknown;
-  pingIntervalMs?: number;
+  pingMessage: unknown;
+  pingIntervalMs: number;
 };
 
 export class WsTransport {
   private _options: WsTransportOptions;
   private _socket: WebSocket | null = null;
+  private timerCancellation: number | undefined;
   public constructor(options: WsTransportOptions) {
     this._options = options;
   }
@@ -21,6 +22,9 @@ export class WsTransport {
 
       socket.addEventListener('open', () => {
         console.log('Соединение установлено');
+        this.timerCancellation = window.setInterval(() => {
+          this.send(this._options.pingMessage);
+        }, this._options.pingIntervalMs);
         resolve();
       });
 
@@ -43,6 +47,7 @@ export class WsTransport {
         } else {
           console.log('Обрыв соединения');
         }
+        window.clearInterval(this.timerCancellation);
         const message = `Код: ${event.code} | Причина: ${event.reason}`;
         reject(new Error(message));
       });
@@ -62,5 +67,6 @@ export class WsTransport {
 
   public close() {
     this._socket?.close();
+    window.clearInterval(this.timerCancellation);
   }
 }

@@ -21,6 +21,8 @@ class MessageService {
     this._transport = new WsTransport({
       getUrl: () => this.getTransportUrl(chatId),
       onMessage: (data) => this.storeReceivedMessages(data),
+      pingIntervalMs: 30_000,
+      pingMessage: { type: 'ping' },
     });
     await this._transport.connect();
   }
