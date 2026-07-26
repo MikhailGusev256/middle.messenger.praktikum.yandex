@@ -1,12 +1,12 @@
 import chatApi from '../../api/chat-api.ts';
 import store from '../../store/store.ts';
-import { MessageService } from '../message/message-service.ts';
+import messageService from '../message/message-service.ts';
+import { SELECTED_CHAT_USERS_KEY } from '../user/user-selectors.ts';
 import { toChatPreview } from './chat-preview-data.ts';
+import { CHATS_KEY, SELECTED_CHAT_ID_KEY } from './chat-selectors.ts';
 import { toChatUser } from './chat-user.ts';
 
 class ChatService {
-  private _messageService: MessageService | null = null;
-
   public async fetchChats(
     filter?: string,
     offset?: number,
@@ -14,7 +14,7 @@ class ChatService {
   ): Promise<void> {
     const response = await chatApi.getChats({ title: filter, offset, limit });
     const chatPreviews = response.map((c) => toChatPreview(c));
-    store.setState('chats', chatPreviews);
+    store.setState(CHATS_KEY, chatPreviews);
   }
 
   public async createChat(title: string): Promise<void> {
@@ -29,12 +29,8 @@ class ChatService {
 
   public async selectChat(chatId: number) {
     await this.refreshChatUsers(chatId);
-    if (this._messageService != null) {
-      this._messageService.cleanUp();
-    }
-    this._messageService = new MessageService(chatId);
-    await this._messageService.initialize();
-    this._messageService.requestLastMessages();
+    await messageService.connectTo(chatId);
+    messageService.requestLastMessages();
   }
 
   public async addUsers(users: number[], chatId: number): Promise<void> {
@@ -50,8 +46,8 @@ class ChatService {
   private async refreshChatUsers(chatId: number) {
     const chatUserResponseItems = await chatApi.getChatUsers(chatId, {});
     const chatUsers = chatUserResponseItems.map((u) => toChatUser(u));
-    store.setState('selectedChatUsers', chatUsers);
-    store.setState('selectedChatId', chatId);
+    store.setState(SELECTED_CHAT_USERS_KEY, chatUsers);
+    store.setState(SELECTED_CHAT_ID_KEY, chatId);
   }
 }
 

@@ -3,29 +3,32 @@ import store from '../../store/store.ts';
 import { WsTransport } from '../../utils/ws.ts';
 import { selectUserId } from '../user/user-selectors.ts';
 import { toMessage } from './chat-message.ts';
-import { selectCurrentChatMessages } from './message-selectors.ts';
+import {
+  MESSAGES_KEY,
+  selectCurrentChatMessages,
+} from './message-selectors.ts';
 import type { NewChatMessageDto } from './new-chat-message-dto.ts';
 import type { OldChatMessageDto } from './old-chat-message-dto.ts';
 
-export class MessageService {
-  private _transport: WsTransport;
+class MessageService {
+  private _transport: WsTransport | null = null;
 
-  constructor(chatId: number) {
+  public async connectTo(chatId: number): Promise<void> {
+    if (this._transport !== null) {
+      this._transport.close();
+    }
+    this.clearMessages();
     this._transport = new WsTransport({
       getUrl: () => this.getTransportUrl(chatId),
       onMessage: (data) => this.storeReceivedMessages(data),
     });
-  }
-
-  public initialize(): Promise<void> {
-    return this._transport.connect();
-  }
-
-  public cleanUp() {
-    this._transport.close();
+    await this._transport.connect();
   }
 
   public sendMessage(message: string) {
+    if (this._transport === null) {
+      throw new Error('Перед отправкой сообщения надо подключиться к чату');
+    }
     this._transport.send({
       content: message,
       type: 'message',
@@ -37,10 +40,17 @@ export class MessageService {
   }
 
   public requestMessages(offset: number) {
+    if (this._transport === null) {
+      throw new Error('Перед получением сообщений надо подключиться к чату');
+    }
     this._transport.send({
       content: offset.toString(),
       type: 'get old',
     });
+  }
+
+  private clearMessages() {
+    store.setState(MESSAGES_KEY, []);
   }
 
   private async getTransportUrl(chatId: number) {
@@ -81,3 +91,5 @@ export class MessageService {
     return Array.isArray(data);
   }
 }
+
+export default new MessageService();
