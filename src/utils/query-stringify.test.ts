@@ -6,6 +6,10 @@ describe('queryStringify', () => {
     expect(queryStringify({})).toBe('');
   });
 
+  it('пропускает undefined', () => {
+    expect(queryStringify({ p: undefined })).toBe('');
+  });
+
   it('склеивает несколько параметров через &', () => {
     expect(queryStringify({ offset: 0, limit: 20 })).toBe('offset=0&limit=20');
   });
