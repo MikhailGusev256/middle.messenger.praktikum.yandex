@@ -4,7 +4,7 @@ import {
   HttpNetworkError,
   HttpTimeoutError,
 } from './http-error.ts';
-import { queryStringify } from './queryStringify.ts';
+import { queryStringify } from './query-stringify.ts';
 
 const METHODS = {
   GET: 'GET',
