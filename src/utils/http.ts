@@ -97,13 +97,8 @@ class HTTPTransport {
       xhr.withCredentials = true;
       xhr.timeout = timeout;
       const isGet = method === METHODS.GET;
-
-      xhr.open(
-        method,
-        isGet && queryParameters
-          ? `${url}${queryStringify(queryParameters)}`
-          : url,
-      );
+      const queryString = queryStringify(queryParameters);
+      xhr.open(method, isGet && queryString ? `${url}?${queryString}` : url);
 
       if (responseType) {
         xhr.responseType = responseType;

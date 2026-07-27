@@ -1,20 +1,12 @@
 export function queryStringify(
-  data: Record<string, string | number | boolean>,
+  data: Record<string, string | number | boolean | undefined>,
 ) {
-  const keys = Object.keys(data);
-
-  if (keys.length === 0) {
-    return '';
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(data)) {
+    if (value === undefined) {
+      continue;
+    }
+    params.append(key, String(value));
   }
-
-  return keys.reduce((result, key, index) => {
-    const value = data[key];
-
-    const encodedKey = encodeURIComponent(key);
-    const encodedValue = encodeURIComponent(value);
-
-    const separator = index < keys.length - 1 ? '&' : '';
-
-    return `${result}${encodedKey}=${encodedValue}${separator}`;
-  }, '?');
+  return params.toString();
 }

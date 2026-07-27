@@ -7,6 +7,6 @@ describe('queryStringify', () => {
   });
 
   it('склеивает несколько параметров через &', () => {
-    expect(queryStringify({ offset: 0, limit: 20 })).toBe('?offset=0&limit=20');
+    expect(queryStringify({ offset: 0, limit: 20 })).toBe('offset=0&limit=20');
   });
 });
