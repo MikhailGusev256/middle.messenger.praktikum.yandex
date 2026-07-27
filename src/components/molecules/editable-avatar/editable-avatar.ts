@@ -1,5 +1,5 @@
 import userService from '../../../services/user/user-service.ts';
-import { HttpError } from '../../../utils/http-error.ts';
+import { ApiError } from '../../../utils/http-error.ts';
 import type { AvatarProps } from '../../atoms/avatar/avatar.ts';
 import Block, { type EventListType } from '../../core/block.ts';
 
@@ -33,7 +33,7 @@ export default class EditableAvatar extends Block<EditableAvatarProps> {
         await userService.updateAvatar(file);
       } catch (e) {
         const error =
-          e instanceof HttpError ? e.message : 'Произошла неизвестная ошибка';
+          e instanceof ApiError ? e.message : 'Произошла неизвестная ошибка';
         this.setProps({ error: error });
       }
     },

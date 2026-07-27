@@ -1,5 +1,5 @@
 import logger from '../../services/log/console-logger.ts';
-import { HttpError } from '../../utils/http-error.ts';
+import { ApiError } from '../../utils/http-error.ts';
 import Input from '../molecules/input/input.ts';
 import Block, { type BlockOwnProps } from './block.ts';
 
@@ -36,7 +36,7 @@ export default abstract class Form<
       try {
         await this.onValidSubmit(obj);
       } catch (e) {
-        if (e instanceof HttpError) {
+        if (e instanceof ApiError) {
           this.showError(e.message);
         } else {
           this.showError('Произошла неизвестная ошибка');

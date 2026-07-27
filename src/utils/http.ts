@@ -1,4 +1,10 @@
-import { apiUrl } from '../api/constants.ts';
+import {
+  HttpAbortError,
+  HttpError,
+  HttpNetworkError,
+  HttpTimeoutError,
+} from './http-error.ts';
+import { queryStringify } from './queryStringify.ts';
 
 const METHODS = {
   GET: 'GET',
@@ -6,31 +12,6 @@ const METHODS = {
   PUT: 'PUT',
   DELETE: 'DELETE',
 } as const;
-
-function queryStringify(
-  data: Record<string, string | number | boolean | undefined>,
-) {
-  const keys = Object.keys(data);
-
-  if (keys.length === 0) {
-    return '';
-  }
-
-  return keys.reduce((result, key, index) => {
-    const value = data[key];
-
-    if (value === undefined || value === null) {
-      return result;
-    }
-
-    const encodedKey = encodeURIComponent(key);
-    const encodedValue = encodeURIComponent(value);
-
-    const separator = index < keys.length - 1 ? '&' : '';
-
-    return `${result}${encodedKey}=${encodedValue}${separator}`;
-  }, '?');
-}
 
 export interface RequestOptions {
   data?: FormData | Record<string, unknown>;
@@ -44,11 +25,34 @@ interface RequestOptionsWithMethod extends RequestOptions {
   method: keyof typeof METHODS;
 }
 
+export function parseXhr(xhr: XMLHttpRequest) {
+  if (xhr.responseType) {
+    return xhr.response;
+  } else {
+    try {
+      const contentType = xhr.getResponseHeader('Content-Type');
+      if (contentType && contentType.includes('application/json')) {
+        return JSON.parse(xhr.responseText);
+      } else {
+        return xhr.responseText;
+      }
+    } catch (e) {
+      console.log(e);
+      return xhr.responseText;
+    }
+  }
+}
+
 class HTTPTransport {
   private readonly _baseUrl: string;
+  private readonly _createXhr: () => XMLHttpRequest;
 
-  constructor(baseUrl: string) {
-    this._baseUrl = apiUrl + baseUrl;
+  constructor(
+    baseUrl: string,
+    createXhr: () => XMLHttpRequest = () => new XMLHttpRequest(),
+  ) {
+    this._baseUrl = baseUrl;
+    this._createXhr = createXhr;
   }
 
   private makeMethod(requestMethod: keyof typeof METHODS) {
@@ -89,8 +93,9 @@ class HTTPTransport {
         return;
       }
 
-      const xhr = new XMLHttpRequest();
+      const xhr = this._createXhr();
       xhr.withCredentials = true;
+      xhr.timeout = timeout;
       const isGet = method === METHODS.GET;
 
       xhr.open(
@@ -110,55 +115,15 @@ class HTTPTransport {
 
       xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
-          let response;
-
-          if (xhr.responseType) {
-            response = xhr.response;
-          } else {
-            try {
-              const contentType = xhr.getResponseHeader('Content-Type');
-              if (contentType && contentType.includes('application/json')) {
-                response = JSON.parse(xhr.responseText);
-              } else {
-                response = xhr.responseText;
-              }
-            } catch (e) {
-              console.log(e);
-              response = xhr.responseText;
-            }
-          }
-
-          resolve(response);
+          resolve(parseXhr(xhr));
         } else {
-          reject({
-            status: xhr.status,
-            statusText: xhr.statusText,
-            response: xhr.responseText,
-            request: xhr,
-          });
+          reject(new HttpError(xhr.status, xhr.statusText, xhr.responseText));
         }
       };
 
-      xhr.onabort = () =>
-        reject({
-          reason: 'Request aborted',
-          request: xhr,
-        });
-
-      xhr.onerror = () =>
-        reject({
-          reason: 'Network error',
-          request: xhr,
-        });
-
-      xhr.timeout = timeout;
-
-      xhr.ontimeout = () =>
-        reject({
-          reason: 'Request timeout',
-          timeout: timeout,
-          request: xhr,
-        });
+      xhr.onabort = () => reject(new HttpAbortError());
+      xhr.onerror = () => reject(new HttpNetworkError());
+      xhr.ontimeout = () => reject(new HttpTimeoutError());
 
       if (isGet || !data) {
         xhr.send();

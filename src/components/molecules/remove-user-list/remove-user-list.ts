@@ -1,6 +1,6 @@
 import chatService from '../../../services/chat/chat-service.ts';
 import type { ChatUser } from '../../../services/chat/chat-user.ts';
-import { HttpError } from '../../../utils/http-error.ts';
+import { ApiError } from '../../../utils/http-error.ts';
 import Block, {
   type BlockOwnProps,
   type EventListType,
@@ -47,7 +47,7 @@ export default class RemoveUserList extends Block<RemoveUserListProps> {
       try {
         await chatService.removeUsers([id], this.props.chatId);
       } catch (e) {
-        if (e instanceof HttpError) {
+        if (e instanceof ApiError) {
           this.showError(e.message);
         } else {
           this.showError('Произошла неизвестная ошибка');
