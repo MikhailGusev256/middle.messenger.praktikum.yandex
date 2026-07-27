@@ -1,5 +1,5 @@
 export function queryStringify(
-  data: Record<string, string | number | boolean | undefined>,
+  data: Record<string, string | number | boolean>,
 ) {
   const keys = Object.keys(data);
 
@@ -9,10 +9,6 @@ export function queryStringify(
 
   return keys.reduce((result, key, index) => {
     const value = data[key];
-
-    if (value === undefined || value === null) {
-      return result;
-    }
 
     const encodedKey = encodeURIComponent(key);
     const encodedValue = encodeURIComponent(value);
