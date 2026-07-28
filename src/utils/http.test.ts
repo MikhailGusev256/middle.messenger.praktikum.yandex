@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { HttpError, HttpNetworkError } from './http-error.ts';
+import { HttpError, HttpNetworkError } from './errors.ts';
 import HTTPTransport from './http.ts';
 
 interface Overrides {
