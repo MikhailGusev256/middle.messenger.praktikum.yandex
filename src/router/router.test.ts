@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Block from '../components/core/block.ts';
 import type { RouteConfig } from './routeConfig.ts';
 import type Router from './router.ts';
+import { RouteVisibility } from './routeVisibility.ts';
 const mocks = vi.hoisted(() => ({
   getState: vi.fn(),
 }));
@@ -15,9 +16,24 @@ class StubBlock extends Block {
 }
 
 const stubRoutes: RouteConfig[] = [
-  { name: 'login', path: '/', view: StubBlock, public: true },
-  { name: 'chats', path: '/messenger', view: StubBlock, public: false },
-  { name: 'error404', path: '/404', view: StubBlock, public: true },
+  {
+    name: 'login',
+    path: '/',
+    view: StubBlock,
+    visibility: RouteVisibility.OnlyForAnonymous,
+  },
+  {
+    name: 'chats',
+    path: '/messenger',
+    view: StubBlock,
+    visibility: RouteVisibility.OnlyForLoggedIn,
+  },
+  {
+    name: 'error404',
+    path: '/404',
+    view: StubBlock,
+    visibility: RouteVisibility.ForEveryone,
+  },
 ];
 
 describe('Router', () => {
@@ -42,11 +58,26 @@ describe('Router', () => {
     expect(window.location.pathname).equal('/404');
   });
 
-  it('start редиректит на chats, если страница публичная и пользователь залогинен', () => {
+  it('start редиректит на chats, если страница только для анонимов и пользователь залогинен', () => {
     mocks.getState.mockReturnValue({ user: {} });
     window.history.pushState({}, '', '/');
     const router = RouterClass.initialize('#app', stubRoutes);
     router.start();
     expect(window.location.pathname).equal('/messenger');
+  });
+
+  it('start не редиректит со страниц, которые доступны всем, если пользователь залогинен', () => {
+    mocks.getState.mockReturnValue({ user: {} });
+    window.history.pushState({}, '', '/404');
+    const router = RouterClass.initialize('#app', stubRoutes);
+    router.start();
+    expect(window.location.pathname).equal('/404');
+  });
+
+  it('start не редиректит со страниц, которые доступны всем, если пользователь не залогинен', () => {
+    window.history.pushState({}, '', '/404');
+    const router = RouterClass.initialize('#app', stubRoutes);
+    router.start();
+    expect(window.location.pathname).equal('/404');
   });
 });

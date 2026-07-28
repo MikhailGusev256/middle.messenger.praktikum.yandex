@@ -1,21 +1,22 @@
 import type Block from '../components/core/block.ts';
 import type { BlockOwnProps } from '../components/core/block.ts';
+import { RouteVisibility } from './routeVisibility.ts';
 
 export default class Route {
   private _block: Block | null;
   private readonly _blockClass: new () => Block;
   private readonly _props: BlockOwnProps;
   private readonly path: string;
-  public readonly isPublic: boolean;
+  public readonly visibility: RouteVisibility;
 
   constructor(
     path: string,
-    isPublic: boolean,
+    visibility: RouteVisibility,
     view: new () => Block,
     props: BlockOwnProps,
   ) {
     this.path = path;
-    this.isPublic = isPublic;
+    this.visibility = visibility;
     this._blockClass = view;
     this._block = null;
     this._props = props;

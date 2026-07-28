@@ -3,6 +3,7 @@ import type { TemplateNames } from '../components/templates';
 import store from '../store/store.ts';
 import Route from './route.ts';
 import { type RouteConfig } from './routeConfig.ts';
+import { RouteVisibility } from './routeVisibility.ts';
 
 export default class Router {
   private static __instance: Router;
@@ -32,7 +33,7 @@ export default class Router {
     Router.__instance = this;
 
     for (const config of routes) {
-      this.use(config.path, config.public, config.view);
+      this.use(config.path, config.visibility, config.view);
     }
 
     this.pathByName = new Map(routes.map((c) => [c.name, c.path]));
@@ -40,8 +41,8 @@ export default class Router {
     this._rootElement = rootElement;
   }
 
-  use(path: string, isPublic: boolean, block: new () => Block) {
-    const route = new Route(path, isPublic, block, {});
+  use(path: string, visibility: RouteVisibility, block: new () => Block) {
+    const route = new Route(path, visibility, block, {});
     this.routes.push(route);
     return this;
   }
@@ -63,12 +64,12 @@ export default class Router {
 
     const user = store.getState()['user'];
 
-    if (route.isPublic && user != null) {
+    if (route.visibility === RouteVisibility.OnlyForAnonymous && user != null) {
       this.go('chats', true);
       return;
     }
 
-    if (!route.isPublic && user == null) {
+    if (route.visibility === RouteVisibility.OnlyForLoggedIn && user == null) {
       this.go('login', true);
       return;
     }

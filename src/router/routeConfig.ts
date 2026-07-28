@@ -5,12 +5,13 @@ import errorTmpl from '../components/templates/error';
 import loginTmpl from '../components/templates/login';
 import profileTmpl from '../components/templates/profile';
 import registerTmpl from '../components/templates/register';
+import { RouteVisibility } from './routeVisibility.ts';
 
 export type RouteConfig = {
   name: TemplateNames;
   path: string;
   view: new () => Block;
-  public: boolean;
+  visibility: RouteVisibility;
 };
 
 export const routeConfigs: RouteConfig[] = [
@@ -18,36 +19,36 @@ export const routeConfigs: RouteConfig[] = [
     name: 'login',
     path: '/',
     view: loginTmpl,
-    public: true,
+    visibility: RouteVisibility.OnlyForAnonymous,
   },
   {
     name: 'register',
     path: '/sign-up',
     view: registerTmpl,
-    public: true,
+    visibility: RouteVisibility.OnlyForAnonymous,
   },
   {
     name: 'chats',
     path: '/messenger',
     view: chatsTmpl,
-    public: false,
+    visibility: RouteVisibility.OnlyForLoggedIn,
   },
   {
     name: 'profile',
     path: '/settings',
     view: profileTmpl,
-    public: false,
+    visibility: RouteVisibility.OnlyForLoggedIn,
   },
   {
     name: 'error404',
     path: '/404',
     view: errorTmpl.Error404,
-    public: true,
+    visibility: RouteVisibility.ForEveryone,
   },
   {
     name: 'error500',
     path: '/500',
     view: errorTmpl.Error500,
-    public: true,
+    visibility: RouteVisibility.ForEveryone,
   },
 ] as const;
