@@ -1,4 +1,5 @@
 import chatService from '../../../services/chat/chat-service.ts';
+import errorService from '../../../services/error/error-service.ts';
 import Block, {
   type BlockOwnProps,
   type EventListType,
@@ -71,7 +72,11 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
 
       const deleteChatButton = target.closest('[data-role="menu-delete-chat"]');
       if (deleteChatButton) {
-        await chatService.deleteChat(this.props.id);
+        try {
+          await chatService.deleteChat(this.props.id);
+        } catch (error) {
+          errorService.reportUnexpected(error);
+        }
         return;
       }
     },

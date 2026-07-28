@@ -1,3 +1,4 @@
+import errorService from '../../../services/error/error-service.ts';
 import userService from '../../../services/user/user-service.ts';
 import type { User } from '../../../services/user/user.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
@@ -52,7 +53,13 @@ export default class Profile extends Block<ProfileProps> {
     this.props.changeToViewMode = () => this.setMode('view');
     this.props.changeToEditProfileMode = () => this.setMode('edit-profile');
     this.props.changeToEditPasswordMode = () => this.setMode('edit-password');
-    this.props.logout = () => userService.logout();
+    this.props.logout = async () => {
+      try {
+        await userService.logout();
+      } catch (error) {
+        errorService.reportUnexpected(error);
+      }
+    };
   }
 
   private setMode(mode: ProfileModes): void {
