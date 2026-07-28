@@ -73,7 +73,7 @@ class HTTPTransport {
   public put = this.makeMethod(METHODS.PUT);
   public delete = this.makeMethod(METHODS.DELETE);
 
-  request = <TResponse = unknown>(
+  private request = <TResponse = unknown>(
     shortUrl: string,
     options: RequestOptionsWithMethod,
     timeout = 5000,
