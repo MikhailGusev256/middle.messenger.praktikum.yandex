@@ -58,6 +58,10 @@ npm test          # watch-режим
 npm run test:run  # однократный прогон (CI, precommit)
 ```
 
+### Почему в зависимостях есть jest
+
+В `devDependencies` присутствует `jest`, хотя тесты написаны на Vitest. Это нужно, чтобы проходили автотесты Практикума
+
 ## Деплой
 
 Проект развёрнут на Netlify: https://dapper-snickerdoodle-50ee4d.netlify.app/
