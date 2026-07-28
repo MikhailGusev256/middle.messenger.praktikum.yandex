@@ -68,10 +68,10 @@ class HTTPTransport {
     };
   }
 
-  get = this.makeMethod(METHODS.GET);
-  post = this.makeMethod(METHODS.POST);
-  put = this.makeMethod(METHODS.PUT);
-  delete = this.makeMethod(METHODS.DELETE);
+  public get = this.makeMethod(METHODS.GET);
+  public post = this.makeMethod(METHODS.POST);
+  public put = this.makeMethod(METHODS.PUT);
+  public delete = this.makeMethod(METHODS.DELETE);
 
   request = <TResponse = unknown>(
     shortUrl: string,
@@ -96,13 +96,13 @@ class HTTPTransport {
       const xhr = this._createXhr();
       xhr.withCredentials = true;
       xhr.timeout = timeout;
-      const isGet = method === METHODS.GET;
-      const queryString = queryStringify(queryParameters);
-      xhr.open(method, isGet && queryString ? `${url}?${queryString}` : url);
-
       if (responseType) {
         xhr.responseType = responseType;
       }
+
+      const isGet = method === METHODS.GET;
+      const queryString = queryStringify(queryParameters);
+      xhr.open(method, isGet && queryString ? `${url}?${queryString}` : url);
 
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);
