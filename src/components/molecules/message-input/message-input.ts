@@ -16,6 +16,7 @@ export default class MessageInput extends Form {
           autocomplete="off"
           ref="input"}}}
     {{{ Button text="Отправить" type="submit"}}}
+    <span class="message-input__error">{{{ Error error=error }}}</span>
   </form>
   `;
 
