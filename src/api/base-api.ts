@@ -5,7 +5,7 @@ import {
   HttpNetworkError,
   HttpTimeoutError,
   type YandexApiError,
-} from '../utils/http-error.ts';
+} from '../utils/errors.ts';
 import HTTPTransport, { type RequestOptions } from '../utils/http.ts';
 import { apiUrl } from './constants.ts';
 

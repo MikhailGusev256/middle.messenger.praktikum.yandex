@@ -11,6 +11,7 @@ export class HttpError extends Error {
 export class HttpAbortError extends Error {}
 export class HttpNetworkError extends Error {}
 export class HttpTimeoutError extends Error {}
+export class WsDisconnectedError extends Error {}
 
 export class ApiError extends Error {}
 
