@@ -3,7 +3,7 @@ import {
   HttpError,
   HttpNetworkError,
   HttpTimeoutError,
-} from './http-error.ts';
+} from './errors.ts';
 import { queryStringify } from './query-stringify.ts';
 
 const METHODS = {

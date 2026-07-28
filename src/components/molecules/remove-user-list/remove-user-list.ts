@@ -1,16 +1,13 @@
 import chatService from '../../../services/chat/chat-service.ts';
 import type { ChatUser } from '../../../services/chat/chat-user.ts';
-import { ApiError } from '../../../utils/http-error.ts';
-import Block, {
-  type BlockOwnProps,
-  type EventListType,
-} from '../../core/block.ts';
+import { ApiError } from '../../../utils/errors.ts';
+import Block, { type EventListType } from '../../core/block.ts';
+import type { PropsWithError } from '../../core/props-with-error.ts';
 
-interface RemoveUserListProps extends BlockOwnProps {
+interface RemoveUserListProps extends PropsWithError {
   chatId: number;
   chatUsers?: ChatUser[];
   onDone?: () => void;
-  error?: string;
 }
 
 export default class RemoveUserList extends Block<RemoveUserListProps> {

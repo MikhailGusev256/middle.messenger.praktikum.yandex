@@ -1,11 +1,11 @@
 import logger from '../../services/log/console-logger.ts';
-import { ApiError } from '../../utils/http-error.ts';
+import { ApiError } from '../../utils/errors.ts';
 import Input from '../molecules/input/input.ts';
-import Block, { type BlockOwnProps } from './block.ts';
+import Block from './block.ts';
+import type { PropsWithError } from './props-with-error.ts';
 
-export interface FormProps extends BlockOwnProps {
+export interface FormProps extends PropsWithError {
   onDone?: () => void;
-  error: string;
 }
 
 export default abstract class Form<
