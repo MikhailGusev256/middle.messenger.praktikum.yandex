@@ -1,7 +1,9 @@
 import chatApi from '../../api/chat-api.ts';
 import { wsOrigin } from '../../api/constants.ts';
 import store from '../../store/store.ts';
+import { ApiError, WsDisconnectedError } from '../../utils/errors.ts';
 import { WsTransport } from '../../utils/ws.ts';
+import logger from '../log/console-logger.ts';
 import { selectUserId } from '../user/user-selectors.ts';
 import { toMessage } from './chat-message.ts';
 import {
@@ -15,24 +17,29 @@ class MessageService {
   private _transport: WsTransport | null = null;
 
   public async connectTo(chatId: number): Promise<void> {
-    if (this._transport !== null) {
-      this._transport.close();
-    }
-    this.clearMessages();
+    this.disconnect();
     this._transport = new WsTransport({
       getUrl: () => this.getTransportUrl(chatId),
       onMessage: (data) => this.storeReceivedMessages(data),
+      onDisconnect: (error) => logger.error(error),
       pingIntervalMs: 30_000,
       pingMessage: { type: 'ping' },
     });
-    await this._transport.connect();
+    try {
+      await this._transport.connect();
+    } catch (error) {
+      throw this.toApiError(error);
+    }
+  }
+
+  public disconnect() {
+    this._transport?.close();
+    this._transport = null;
+    this.clearMessages();
   }
 
   public sendMessage(message: string) {
-    if (this._transport === null) {
-      throw new Error('Перед отправкой сообщения надо подключиться к чату');
-    }
-    this._transport.send({
+    this.send({
       content: message,
       type: 'message',
     });
@@ -43,13 +50,35 @@ class MessageService {
   }
 
   public requestMessages(offset: number) {
-    if (this._transport === null) {
-      throw new Error('Перед получением сообщений надо подключиться к чату');
-    }
-    this._transport.send({
+    this.send({
       content: offset.toString(),
       type: 'get old',
     });
+  }
+
+  private send(frame: unknown) {
+    if (this._transport === null) {
+      throw new ApiError('Нет подключения к чату');
+    }
+    try {
+      this._transport.send(frame);
+    } catch (error) {
+      throw this.toApiError(error);
+    }
+  }
+
+  /**
+   * Приводит ошибки сокета к тому же виду, что BaseAPI даёт для HTTP:
+   * наружу из сервиса выходит только ApiError с текстом для пользователя.
+   */
+  private toApiError(error: unknown): ApiError {
+    if (error instanceof ApiError) {
+      return error;
+    }
+    if (error instanceof WsDisconnectedError) {
+      return new ApiError('Соединение с чатом потеряно. Обновите страницу');
+    }
+    return new ApiError('Неопознанная ошибка');
   }
 
   private clearMessages() {

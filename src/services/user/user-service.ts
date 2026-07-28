@@ -2,6 +2,7 @@ import authApi, { type SignUpRequest } from '../../api/auth-api.ts';
 import userApi from '../../api/user-api.ts';
 import router from '../../router/router.ts';
 import store from '../../store/store.ts';
+import messageService from '../message/message-service.ts';
 import { toUser } from './user.ts';
 
 class UserService {
@@ -26,6 +27,7 @@ class UserService {
 
   public async logout() {
     await authApi.logout();
+    messageService.disconnect();
     store.reset();
     router.instance().go('login');
   }
