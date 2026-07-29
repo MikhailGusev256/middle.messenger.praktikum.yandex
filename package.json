@@ -48,6 +48,9 @@
   "dependencies": {
     "handlebars": "^4.7.9"
   },
+  "overrides": {
+    "brace-expansion": "5.0.8"
+  },
   "engines": {
     "node": ">=22"
   }
