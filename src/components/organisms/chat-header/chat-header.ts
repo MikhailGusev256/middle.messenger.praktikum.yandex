@@ -12,6 +12,7 @@ interface ChatHeaderProps extends BlockOwnProps {
   isMenuOpen: boolean;
   formMode: 'add' | 'remove' | null;
   closeForm: () => void;
+  editPicture: (file: File) => Promise<void>;
 }
 
 export default class ChatHeader extends Block<ChatHeaderProps> {
@@ -20,11 +21,13 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
   constructor(args: ChatHeaderProps = {} as ChatHeaderProps) {
     super(args);
     this.props.closeForm = () => this.setProps({ formMode: null });
+    this.props.editPicture = (file: File) =>
+      chatService.updatePicture(this.props.id, file);
   }
 
   protected template = `
   <div class="chat-header">
-    {{{ Avatar src=src name=name }}}
+    {{{ EditableAvatar src=src name=name editAction=editPicture }}}
     <strong class="chat-header__name">{{name}}</strong>
 
     <button

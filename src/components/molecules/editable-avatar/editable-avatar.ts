@@ -1,10 +1,11 @@
-import userService from '../../../services/user/user-service.ts';
 import { ApiError } from '../../../utils/errors.ts';
 import type { AvatarProps } from '../../atoms/avatar/avatar.ts';
 import Block, { type EventListType } from '../../core/block.ts';
 import type { PropsWithError } from '../../core/props-with-error.ts';
 
-interface EditableAvatarProps extends AvatarProps, PropsWithError {}
+interface EditableAvatarProps extends AvatarProps, PropsWithError {
+  editAction: (file: File) => Promise<void>;
+}
 
 export default class EditableAvatar extends Block<EditableAvatarProps> {
   static componentName = 'EditableAvatar';
@@ -29,7 +30,7 @@ export default class EditableAvatar extends Block<EditableAvatarProps> {
       }
 
       try {
-        await userService.updateAvatar(file);
+        await this.props.editAction(file);
       } catch (e) {
         const error =
           e instanceof ApiError ? e.message : 'Произошла неизвестная ошибка';

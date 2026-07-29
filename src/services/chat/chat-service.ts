@@ -52,6 +52,14 @@ class ChatService {
     store.setState(SELECTED_CHAT_USERS_KEY, chatUsers);
     store.setState(SELECTED_CHAT_ID_KEY, chatId);
   }
+
+  public async updatePicture(chatId: number, file: File) {
+    const formData = new FormData();
+    formData.append('chatId', String(chatId));
+    formData.append('avatar', file);
+    await chatApi.updatePicture(formData);
+    await this.fetchChats();
+  }
 }
 
 export default new ChatService();

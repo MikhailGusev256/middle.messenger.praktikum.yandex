@@ -113,6 +113,12 @@ class ChatAPI extends BaseAPI {
     const result = await this.post<ChatTokenResponse>(`/token/${chatId}`);
     return result.token;
   }
+
+  public async updatePicture(formData: FormData) {
+    return this.put<GetChatsResponseItem>('/avatar', {
+      data: formData,
+    });
+  }
 }
 
 export default new ChatAPI('chats');
