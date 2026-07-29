@@ -30,6 +30,7 @@ export default class EditableAvatar extends Block<EditableAvatarProps> {
       }
 
       try {
+        this.setProps({ error: '' });
         await this.props.editAction(file);
       } catch (e) {
         const error =
