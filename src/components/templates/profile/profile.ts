@@ -1,3 +1,4 @@
+import errorService from '../../../services/error/error-service.ts';
 import userService from '../../../services/user/user-service.ts';
 import type { User } from '../../../services/user/user.ts';
 import Block, { type BlockOwnProps } from '../../core/block.ts';
@@ -8,6 +9,7 @@ interface ProfileProps extends BlockOwnProps {
   changeToViewMode: () => void;
   changeToEditProfileMode: () => void;
   changeToEditPasswordMode: () => void;
+  updateAvatar: (file: File) => Promise<void>;
   logout: () => void;
   user?: User;
 }
@@ -31,7 +33,7 @@ export default class Profile extends Block<ProfileProps> {
 
           {{#ifEquals targetMode "view"}}
             <div class="profile__header">
-                {{{ EditableAvatar src=user.avatar name=user.display_name}}}
+                {{{ EditableAvatar src=user.avatar name=user.display_name editAction=updateAvatar}}}
                 <h1 class="hl">{{user.display_name}}</h1>
             </div>
             <div class="profile__link-wrapper">
@@ -52,7 +54,14 @@ export default class Profile extends Block<ProfileProps> {
     this.props.changeToViewMode = () => this.setMode('view');
     this.props.changeToEditProfileMode = () => this.setMode('edit-profile');
     this.props.changeToEditPasswordMode = () => this.setMode('edit-password');
-    this.props.logout = () => userService.logout();
+    this.props.updateAvatar = (file: File) => userService.updateAvatar(file);
+    this.props.logout = async () => {
+      try {
+        await userService.logout();
+      } catch (error) {
+        errorService.reportUnexpected(error);
+      }
+    };
   }
 
   private setMode(mode: ProfileModes): void {

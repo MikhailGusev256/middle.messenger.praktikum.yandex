@@ -1,4 +1,5 @@
 import chatService from '../../../services/chat/chat-service.ts';
+import errorService from '../../../services/error/error-service.ts';
 import Block, { type EventListType } from '../../core/block.ts';
 
 export default class LeftSidePanel extends Block {
@@ -25,7 +26,11 @@ export default class LeftSidePanel extends Block {
       const input = e.target as HTMLInputElement;
       if (input.id === 'search-chat') {
         const filter = input.value;
-        await chatService.fetchChats(filter);
+        try {
+          await chatService.fetchChats(filter);
+        } catch (error) {
+          errorService.reportUnexpected(error);
+        }
       }
     },
   };

@@ -1,10 +1,10 @@
-import userService from '../../../services/user/user-service.ts';
-import { HttpError } from '../../../utils/http-error.ts';
+import { ApiError } from '../../../utils/errors.ts';
 import type { AvatarProps } from '../../atoms/avatar/avatar.ts';
 import Block, { type EventListType } from '../../core/block.ts';
+import type { PropsWithError } from '../../core/props-with-error.ts';
 
-interface EditableAvatarProps extends AvatarProps {
-  error: string;
+interface EditableAvatarProps extends AvatarProps, PropsWithError {
+  editAction: (file: File) => Promise<void>;
 }
 
 export default class EditableAvatar extends Block<EditableAvatarProps> {
@@ -30,10 +30,11 @@ export default class EditableAvatar extends Block<EditableAvatarProps> {
       }
 
       try {
-        await userService.updateAvatar(file);
+        this.setProps({ error: '' });
+        await this.props.editAction(file);
       } catch (e) {
         const error =
-          e instanceof HttpError ? e.message : 'Произошла неизвестная ошибка';
+          e instanceof ApiError ? e.message : 'Произошла неизвестная ошибка';
         this.setProps({ error: error });
       }
     },

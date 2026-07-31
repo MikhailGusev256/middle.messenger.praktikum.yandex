@@ -1,4 +1,5 @@
 import chatService from '../../../services/chat/chat-service.ts';
+import errorService from '../../../services/error/error-service.ts';
 import Block, {
   type BlockOwnProps,
   type EventListType,
@@ -11,6 +12,7 @@ interface ChatHeaderProps extends BlockOwnProps {
   isMenuOpen: boolean;
   formMode: 'add' | 'remove' | null;
   closeForm: () => void;
+  editPicture: (file: File) => Promise<void>;
 }
 
 export default class ChatHeader extends Block<ChatHeaderProps> {
@@ -19,11 +21,13 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
   constructor(args: ChatHeaderProps = {} as ChatHeaderProps) {
     super(args);
     this.props.closeForm = () => this.setProps({ formMode: null });
+    this.props.editPicture = (file: File) =>
+      chatService.updatePicture(this.props.id, file);
   }
 
   protected template = `
   <div class="chat-header">
-    {{{ Avatar src=src name=name }}}
+    {{{ EditableAvatar src=src name=name editAction=editPicture }}}
     <strong class="chat-header__name">{{name}}</strong>
 
     <button
@@ -71,7 +75,11 @@ export default class ChatHeader extends Block<ChatHeaderProps> {
 
       const deleteChatButton = target.closest('[data-role="menu-delete-chat"]');
       if (deleteChatButton) {
-        await chatService.deleteChat(this.props.id);
+        try {
+          await chatService.deleteChat(this.props.id);
+        } catch (error) {
+          errorService.reportUnexpected(error);
+        }
         return;
       }
     },

@@ -2,7 +2,8 @@ import type Block from '../components/core/block.ts';
 import type { TemplateNames } from '../components/templates';
 import store from '../store/store.ts';
 import Route from './route.ts';
-import { pathByName, routeConfigs } from './routeConfig.ts';
+import { type RouteConfig } from './routeConfig.ts';
+import { RouteVisibility } from './routeVisibility.ts';
 
 export default class Router {
   private static __instance: Router;
@@ -11,34 +12,37 @@ export default class Router {
   private routes: Route[] = [];
   private history: History = window.history;
   private _currentRoute: Route | undefined = undefined;
+  private pathByName;
 
-  static initialize(rootQuery: string): Router {
+  static initialize(rootQuery: string, routes: RouteConfig[]): Router {
     if (Router.__instance) {
       return Router.__instance;
     }
-    return new Router(rootQuery);
+    return new Router(rootQuery, routes);
   }
 
   static instance(): Router {
     return Router.__instance;
   }
 
-  private constructor(rootQuery: string) {
+  private constructor(rootQuery: string, routes: RouteConfig[]) {
     const rootElement = document.querySelector(rootQuery);
     if (!rootElement) {
       throw Error('Невозможно найти корневой элемент');
     }
     Router.__instance = this;
 
-    for (const config of routeConfigs) {
-      this.use(config.path, config.public, config.view);
+    for (const config of routes) {
+      this.use(config.path, config.visibility, config.view);
     }
+
+    this.pathByName = new Map(routes.map((c) => [c.name, c.path]));
 
     this._rootElement = rootElement;
   }
 
-  use(path: string, isPublic: boolean, block: new () => Block) {
-    const route = new Route(path, isPublic, block, {});
+  use(path: string, visibility: RouteVisibility, block: new () => Block) {
+    const route = new Route(path, visibility, block, {});
     this.routes.push(route);
     return this;
   }
@@ -60,12 +64,12 @@ export default class Router {
 
     const user = store.getState()['user'];
 
-    if (route.isPublic && user != null) {
+    if (route.visibility === RouteVisibility.OnlyForAnonymous && user != null) {
       this.go('chats', true);
       return;
     }
 
-    if (!route.isPublic && user == null) {
+    if (route.visibility === RouteVisibility.OnlyForLoggedIn && user == null) {
       this.go('login', true);
       return;
     }
@@ -79,7 +83,7 @@ export default class Router {
   }
 
   public go(pathname: TemplateNames, replaceState?: boolean) {
-    const path = pathByName.get(pathname);
+    const path = this.pathByName.get(pathname);
     if (!path) {
       throw new Error('Не удалось найти путь для шаблона');
     }

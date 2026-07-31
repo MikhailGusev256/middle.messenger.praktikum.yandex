@@ -1,5 +1,6 @@
 import type { ChatPreviewData } from '../../../services/chat/chat-preview-data.ts';
 import chatService from '../../../services/chat/chat-service.ts';
+import errorService from '../../../services/error/error-service.ts';
 import Block, {
   type BlockOwnProps,
   type EventListType,
@@ -36,7 +37,11 @@ export default class ChatPreviewList extends Block<ChatPreviewListProps> {
         return;
       }
       const id = Number((button as HTMLElement).dataset.id as string);
-      await chatService.selectChat(id);
+      try {
+        await chatService.selectChat(id);
+      } catch (error) {
+        errorService.reportUnexpected(error);
+      }
     },
   };
 }

@@ -7,6 +7,12 @@ const apiProxy = {
     // API ставит куку с Domain=ya-praktikum.tech — браузер на localhost её отбросит
     cookieDomainRewrite: '',
   },
+  '/ws': {
+    target: 'wss://ya-praktikum.tech',
+    changeOrigin: true,
+    // без ws: true прокси не обрабатывает событие upgrade — handshake не доедет
+    ws: true,
+  },
 };
 
 export default defineConfig({

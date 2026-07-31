@@ -1,5 +1,6 @@
 import type { GetChatsResponseItem } from '../../api/chat-api.ts';
 import { resourcesUrl } from '../../api/constants.ts';
+import { formatTime } from '../../utils/format-time.ts';
 
 export interface ChatPreviewData {
   id: number;
@@ -9,15 +10,6 @@ export interface ChatPreviewData {
   dateTime: string;
   count?: number;
   src?: string;
-}
-
-function formatTime(iso: string): string {
-  const date = new Date(iso);
-  const isToday = date.toDateString() === new Date().toDateString();
-
-  return isToday
-    ? date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
-    : date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
 }
 
 export function toChatPreview(dto: GetChatsResponseItem): ChatPreviewData {

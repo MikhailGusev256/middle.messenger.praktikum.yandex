@@ -1,6 +1,12 @@
 import chatApi from '../../api/chat-api.ts';
 import store from '../../store/store.ts';
+import messageService from '../message/message-service.ts';
 import { toChatPreview } from './chat-preview-data.ts';
+import {
+  CHATS_KEY,
+  SELECTED_CHAT_ID_KEY,
+  SELECTED_CHAT_USERS_KEY,
+} from './chat-selectors.ts';
 import { toChatUser } from './chat-user.ts';
 
 class ChatService {
@@ -11,7 +17,7 @@ class ChatService {
   ): Promise<void> {
     const response = await chatApi.getChats({ title: filter, offset, limit });
     const chatPreviews = response.map((c) => toChatPreview(c));
-    store.setState('chats', chatPreviews);
+    store.setState(CHATS_KEY, chatPreviews);
   }
 
   public async createChat(title: string): Promise<void> {
@@ -24,8 +30,10 @@ class ChatService {
     await this.fetchChats();
   }
 
-  public async selectChat(id: number) {
-    await this.refreshChatUsers(id);
+  public async selectChat(chatId: number) {
+    await this.refreshChatUsers(chatId);
+    await messageService.connectTo(chatId);
+    messageService.requestLastMessages();
   }
 
   public async addUsers(users: number[], chatId: number): Promise<void> {
@@ -38,11 +46,19 @@ class ChatService {
     await this.refreshChatUsers(chatId);
   }
 
-  private async refreshChatUsers(id: number) {
-    const chatUserResponseItems = await chatApi.getChatUsers(id, {});
+  private async refreshChatUsers(chatId: number) {
+    const chatUserResponseItems = await chatApi.getChatUsers(chatId, {});
     const chatUsers = chatUserResponseItems.map((u) => toChatUser(u));
-    store.setState('selectedChatUsers', chatUsers);
-    store.setState('selectedChatId', id);
+    store.setState(SELECTED_CHAT_USERS_KEY, chatUsers);
+    store.setState(SELECTED_CHAT_ID_KEY, chatId);
+  }
+
+  public async updatePicture(chatId: number, file: File) {
+    const formData = new FormData();
+    formData.append('chatId', String(chatId));
+    formData.append('avatar', file);
+    await chatApi.updatePicture(formData);
+    await this.fetchChats();
   }
 }
 

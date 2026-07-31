@@ -56,6 +56,10 @@ export default class Input extends Block<InputProps> {
   </div>
   `;
 
+  public clear() {
+    (this.refs.input as HTMLInputElement).value = '';
+  }
+
   protected componentDidMount() {
     super.componentDidMount();
     this.refs.input.addEventListener('blur', this.isValid);

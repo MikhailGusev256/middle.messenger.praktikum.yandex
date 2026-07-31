@@ -1,10 +1,18 @@
-import { type ApiError, HttpError } from '../utils/http-error.ts';
+import {
+  ApiError,
+  HttpAbortError,
+  HttpError,
+  HttpNetworkError,
+  HttpTimeoutError,
+  type YandexApiError,
+} from '../utils/errors.ts';
 import HTTPTransport, { type RequestOptions } from '../utils/http.ts';
+import { apiUrl } from './constants.ts';
 
 export class BaseAPI {
   private transport: HTTPTransport;
   constructor(path: string) {
-    this.transport = new HTTPTransport(path);
+    this.transport = new HTTPTransport(apiUrl + path);
   }
 
   get = <T = unknown>(
@@ -39,15 +47,23 @@ export class BaseAPI {
     try {
       return await p;
     } catch (error) {
-      if (!this.hasResponse(error)) {
-        throw new HttpError(0, 'Сеть недоступна');
+      if (error instanceof HttpNetworkError) {
+        throw new ApiError('Сеть недоступна');
+      }
+      if (error instanceof HttpAbortError) {
+        throw new ApiError('Запрос был прерван');
+      }
+      if (error instanceof HttpTimeoutError) {
+        throw new ApiError('Сервер не отвечает');
+      }
+      if (error instanceof HttpError) {
+        const errorResponse: unknown = this.getParsedError(error.responseText);
+        if (this.isYandexApiError(errorResponse)) {
+          throw new ApiError(errorResponse.reason);
+        }
       }
 
-      const errorResponse: unknown = this.getParsedError(error.response);
-      if (this.isApiError(errorResponse)) {
-        throw new HttpError(error.status, errorResponse.reason);
-      }
-      throw new HttpError(error.status, 'Неопознанная ошибка');
+      throw new ApiError('Неопознанная ошибка');
     }
   }
 
@@ -59,22 +75,12 @@ export class BaseAPI {
     }
   }
 
-  private hasResponse(
-    reason: unknown,
-  ): reason is { status: number; response: string } {
-    return (
-      typeof reason === 'object' &&
-      reason !== null &&
-      'status' in reason &&
-      'response' in reason
-    );
-  }
-  private isApiError(reason: unknown): reason is ApiError {
+  private isYandexApiError(reason: unknown): reason is YandexApiError {
     return (
       typeof reason === 'object' &&
       reason !== null &&
       'reason' in reason &&
-      typeof (reason as ApiError).reason === 'string'
+      typeof (reason as YandexApiError).reason === 'string'
     );
   }
 }
